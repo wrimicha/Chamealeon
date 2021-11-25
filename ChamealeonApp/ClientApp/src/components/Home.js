@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import Sidebar from './Sidebar';
+import MealCard from '../components/MealCard/MealCard'
+import './Home.css'
+
+
 //https://react-icons.github.io/react-icons/icons?name=md
 import { MdHome } from 'react-icons/md';
 export class Home extends Component {
@@ -8,7 +12,17 @@ export class Home extends Component {
   render() {
     return (
       <div>
-        <h1>Hello, world!</h1>
+
+        <div className="meal-container">
+          <MealCard/>
+          <MealCard/>
+          <MealCard/>
+          <MealCard/>
+          <MealCard/>
+          <MealCard/>
+        </div>
+
+        {/* <h1>Hello, world!</h1>
         <p>Welcome to your new single-page application, built with:</p>
         <ul>
           <li><a href='https://get.asp.net/'>ASP.NET Core</a> and <a href='https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx'>C#</a> for cross-platform server-side code</li>
@@ -21,11 +35,9 @@ export class Home extends Component {
           <li><strong>Development server integration</strong>. In development mode, the development server from <code>create-react-app</code> runs in the background automatically, so your client-side resources are dynamically built on demand and the page refreshes when you modify any file.</li>
           <li><strong>Efficient production builds</strong>. In production mode, development-time features are disabled, and your <code>dotnet publish</code> configuration produces minified, efficiently bundled JavaScript files.</li>
         </ul>
-        <p>The <code>ClientApp</code> subdirectory is a standard React application based on the <code>create-react-app</code> template. If you open a command prompt in that directory, you can run <code>npm</code> commands such as <code>npm test</code> or <code>npm install</code>.</p>
+        <p>The <code>ClientApp</code> subdirectory is a standard React application based on the <code>create-react-app</code> template. If you open a command prompt in that directory, you can run <code>npm</code> commands such as <code>npm test</code> or <code>npm install</code>.</p> */}
 
         <Sidebar icon={<MdHome />} text="Home" />
-
-
       </div>
     );
   }
