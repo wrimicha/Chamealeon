@@ -1,0 +1,26 @@
+.shopping-list-container{
+    padding: 60px;
+}
+
+.shopping-list-container{
+    padding-top: 60px;
+}
+
+.add-item{
+    border-radius: 100%;
+    width: 60px;
+    height: 60px;
+    border: none;
+    background: #62c746;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    color: white;
+    transition: all 0.3s ease-in-out;
+}
+
+.add-item:hover{
+    box-shadow: rgba(99, 99, 99, 0.42) 0px 2px 8px 0px;
+}
+
+/* .plus-button-group{
+    
+} */

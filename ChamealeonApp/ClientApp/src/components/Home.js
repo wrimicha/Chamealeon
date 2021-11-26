@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import Sidebar from './Sidebar';
 import MealCard from '../components/MealCard/MealCard'
 import './Home.css'
+import { MdHome } from 'react-icons/md'; //https://react-icons.github.io/react-icons/icons?name=md
 
 
-//https://react-icons.github.io/react-icons/icons?name=md
-import { MdHome } from 'react-icons/md';
 export class Home extends Component {
   static displayName = Home.name;
 
