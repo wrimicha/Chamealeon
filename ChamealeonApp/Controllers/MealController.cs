@@ -8,8 +8,11 @@ using Microsoft.Extensions.Logging;
 
 namespace ChamealeonApp.Controllers
 {
-    [ApiController]
+    [ApiController]// 
     [Route("api/[controller]")]
+
+
+    
     public class MealController : Controller
     {
         //Amir
