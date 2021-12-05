@@ -11,6 +11,7 @@ namespace ChamealeonApp.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+
     public class MealController : Controller
     {
         //Amir
