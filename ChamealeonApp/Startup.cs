@@ -1,4 +1,5 @@
-using ChamealeonApp.Models;
+
+using ChamealeonApp.Models.Persistence;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
