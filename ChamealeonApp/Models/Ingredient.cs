@@ -17,6 +17,12 @@ namespace ChamealeonApp.Models
 
         public List<Meal> Meals {get; set;}
 
+        public string ImageUrl{ get; set;}
+
+        //public string UnitOfMeasurement { get; set; }
+
+        //public double Amount { get; set; }
+
         //public NutritionalInformation nutritionalInformation {get; set;}
     }
 }

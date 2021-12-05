@@ -8,5 +8,12 @@ namespace ChamealeonApp.Models
     public class ShoppingList
     {
         //mike
+
+        public List<Ingredient> Ingredients { get; set; }
+
+        public double EstimatedTotalCost { get; set; }
+
+        public List<Meal> Meals { get; set; }
+
     }
 }
