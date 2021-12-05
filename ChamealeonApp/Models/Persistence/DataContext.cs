@@ -4,9 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using ChamealeonApp.Models.Entities;
+
 namespace ChamealeonApp.Models.Persistence
 {
-    public class DataContext : DbContext
+    public class DataContext : IdentityDbContext<User>
     {
         //Burhan
         //navigation properties
