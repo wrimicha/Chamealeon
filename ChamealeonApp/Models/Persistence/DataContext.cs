@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace ChamealeonApp.Models
+namespace ChamealeonApp.Models.Persistence
 {
     public class DataContext : DbContext
     {
