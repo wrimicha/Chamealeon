@@ -8,6 +8,6 @@ namespace ChamealeonApp.Models
     public class User
     {
         //Burhan
-        
+
     }
 }
