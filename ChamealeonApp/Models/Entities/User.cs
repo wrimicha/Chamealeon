@@ -19,7 +19,7 @@ namespace ChamealeonApp.Models.Entities
         public string Diet { get; set; }
         public double Weight { get; set; } //metric or imperial?
         public double Height { get; set; } //metric or imperial?
-        public NutrionalInformation PersonalNutritionalInformationGoal { get; set; } //personal goals
+        public NutritionalInformation PersonalNutritionalInformationGoal { get; set; } //personal goals
         public MealPlan CurrentMealPlan { get; set; }
     }
 }
