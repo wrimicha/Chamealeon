@@ -8,6 +8,7 @@ namespace ChamealeonApp.Models.Entities
     public class NutritionalInformation
     {
         //Amir
+        public Guid Id { get; set; }
         public int Calories { get; set; }
         public double Fat { get; set; }
         public double protein { get; set; }

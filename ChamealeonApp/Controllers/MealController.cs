@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ChamealeonApp.Models.Entities;
 using ChamealeonApp.Models.Persistence;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace ChamealeonApp.Controllers
@@ -46,6 +47,10 @@ namespace ChamealeonApp.Controllers
         {
             //TODO: Implement Realistic Implementation
             await Task.Yield();
+            // var user = _context.AspNet
+            //             var mealPlan = _context.MealPlans.Include(m => m.MealDays).ThenInclude(md => md.Meals).Where();
+
+
             return Ok();
         }
         //GET full details of a meal (screen, has instructions etc)

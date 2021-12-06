@@ -30,11 +30,13 @@ namespace ChamealeonApp.Controllers
         }
         //burhan
         //GET weekly nutrional information (macros) from db for the week
-        [HttpGet("weeklyInformation")]
+
+        /*
+         [HttpGet("weeklyInformation")]
         public async Task<IActionResult> GetWeeklyNutritionalInformation()
         {
             //create an object of nutrional information to send to the view
-            var totalNutritionalInformation = new NutrionalInformation();
+            var totalNutritionalInformation = new NutritionalInformation();
 
             //create a list of the user's meals
             //TODO: does it need .Include?
@@ -85,6 +87,7 @@ namespace ChamealeonApp.Controllers
             return Ok(totalNutritionalInformation);
             return Ok();
         }
+        */
 
 
     }
