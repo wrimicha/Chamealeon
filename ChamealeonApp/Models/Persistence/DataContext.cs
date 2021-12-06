@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using ChamealeonApp.Models.Entities;
 
@@ -14,6 +12,7 @@ namespace ChamealeonApp.Models.Persistence
     {
         //Burhan
         //navigation properties
+
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<Meal> Meals { get; set; }
         public DbSet<MealPlan> MealPlans { get; set; }
