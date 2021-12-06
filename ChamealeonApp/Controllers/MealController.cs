@@ -22,8 +22,9 @@ namespace ChamealeonApp.Controllers
         }
         //Amir
         //POST add new user meal to db
-        [HttpPost("{id}")]
-        public async Task<IActionResult> AddCustomMealAsync(string id, [FromBody] Meal modelMeal)
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] User modelUser)
+
         {
             // TODO depends on ef core implementation for now
             await Task.Yield();
