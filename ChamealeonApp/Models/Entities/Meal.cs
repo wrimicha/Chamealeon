@@ -17,7 +17,7 @@ namespace ChamealeonApp.Models.Entities
         public string Instructions { get; set; }
         public string Name { get; set; }
         public string ImageUrl { get; set; }
-        public NutrionalInformation NutritionInfo { get; set; }
+        public NutritionalInformation NutritionInfo { get; set; }
 
         //ctor
         public Meal()
