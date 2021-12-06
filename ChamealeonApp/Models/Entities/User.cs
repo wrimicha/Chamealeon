@@ -10,9 +10,8 @@ namespace ChamealeonApp.Models.Entities
     public class User : IdentityUser
     {
         //Burhan
-        //  public Guid Id { get; set; }
+        //no Id because Identity creates it by default
         public string Name { get; set; } //required
-                                         // public string Email { get; set; } //required
         public string Password { get; set; }
         public int Age { get; set; }
         public string Gender { get; set; }
