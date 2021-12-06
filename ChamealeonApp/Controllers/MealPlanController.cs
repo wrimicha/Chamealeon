@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using ChamealeonApp.Models.Authentication;
 using ChamealeonApp.Models.DTOs;
 using ChamealeonApp.Models.Entities;
+using ChamealeonApp.Models.Helpers;
 using ChamealeonApp.Models.Persistence;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -47,15 +48,35 @@ namespace ChamealeonApp.Controllers
 
             //the database will now have a full meal plan saved
             var fullMealPlan = _context.MealPlans;
+         
             return Ok(fullMealPlan);
         }
 
-        //PUT update a specific meal in the weekly meal plan (needs to get a user defined meal)
-        //helper func: search for user made meal within db
-        //helper func: for multiple suggested meal from (call helper API)
 
+
+        [HttpGet("test")]
+        public async Task<IActionResult> Get()
+        {
+            //TODO: Implement Realistic Implementation
+            await SpoonacularAPIHelper.GenerateMealPlanFromSpoonacularAsync("vegetarian", 3000);
+    
+            return Ok();
+        }
+
+
+
+        //BURHAN
+        //PUT update a specific meal in the weekly meal plan FROM USER'S MEALS CREATED IN DB
+
+        //Mike
+        //PUT update a specific meal in the weekly meal plan FROM SPOONACULAR REQUEST
+
+
+        //Mike
         //GET meal plan (DB)
 
+
+        //Mike
         //DELETE a meal from the meal plan
     }
 }

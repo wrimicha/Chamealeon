@@ -72,9 +72,8 @@ namespace ChamealeonApp.Controllers
             return Unauthorized("Not a good password");
         }
 
-        //amir
-
         //update user details
+        //burhan
         [HttpPost]
         public async Task<IActionResult> UpdateDetails([FromBody] User userModel)
         {
@@ -88,6 +87,7 @@ namespace ChamealeonApp.Controllers
         }
 
         //delete user
+        //mike
         [HttpDelete]
         public async Task<IActionResult> Delete(string id)
         {

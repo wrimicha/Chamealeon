@@ -41,18 +41,7 @@ namespace ChamealeonApp.Controllers
         //     return Ok();
         // }
 
-        //DELETE delete user meal?
-        [HttpDelete]
-        public async Task<IActionResult> Delete(string id)
-        {
-            //TODO: Implement Realistic Implementation
-            await Task.Yield();
-            // var user = _context.AspNet
-            //             var mealPlan = _context.MealPlans.Include(m => m.MealDays).ThenInclude(md => md.Meals).Where();
-
-
-            return Ok();
-        }
+        
         //GET full details of a meal (screen, has instructions etc)
         [HttpGet("{id}")]
         public async Task<IActionResult> Get()
