@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using API.Models.DTOs;
 using ChamealeonApp.Models.Authentication;
@@ -72,10 +73,26 @@ namespace ChamealeonApp.Controllers
         }
 
         //amir
-        //create a user
 
         //update user details
+        [HttpPost]
+        public async Task<IActionResult> UpdateDetails([FromBody] User userModel)
+        {
+
+            var user = await _userManager.FindByIdAsync(userModel.Id);
+            // TODO: find what properties need to be updated
+            // Let's assume email only changed
+            user.Email = userModel.Email;
+            await _userManager.UpdateAsync(user);
+            return Created("", null);
+        }
 
         //delete user
+        [HttpDelete]
+        public async Task<IActionResult> Delete(string id)
+        {
+            await _userManager.DeleteAsync(await _userManager.FindByIdAsync(id));
+            return Ok();
+        }
     }
 }
