@@ -17,7 +17,7 @@ namespace ChamealeonApp.Controllers
         //Amir
         //POST add new user meal to db
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] User modelUser, Meal modelMeal)
+        public async Task<IActionResult> Post([FromBody] User modelUser)
         {
             //TODO: Implement Realistic Implementation
             await Task.Yield();
