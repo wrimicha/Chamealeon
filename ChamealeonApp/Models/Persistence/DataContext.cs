@@ -16,9 +16,9 @@ namespace ChamealeonApp.Models.Persistence
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<Meal> Meals { get; set; }
         public DbSet<MealPlan> MealPlans { get; set; }
-        public DbSet<NutrionalInformation> NutrionalInformations { get; set; }
+        public DbSet<NutritionalInformation> NutrionalInformations { get; set; }
         // public DbSet<User> Users { get; set; } //TODO: not need?
-        public DbSet<DaysMeal> Days { get; set; }
+        //public DbSet<DaysMeal> DaysMeals { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

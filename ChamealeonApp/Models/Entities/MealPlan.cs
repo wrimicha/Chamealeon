@@ -10,9 +10,9 @@ namespace ChamealeonApp.Models.Entities
         //Amir
         public Guid Id { get; set; }
 
-        public User User { get; set; }
+        //public User User { get; set; }
         // TODO: figure out how to get multiple days of week with multiple meals
-        
+
         public List<DaysMeal> MealDays { get; set; }
     }
 }

@@ -4,7 +4,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using ChamealeonApp.Models.Authentication;
 using ChamealeonApp.Models.DTOs;
+using ChamealeonApp.Models.Entities;
+using ChamealeonApp.Models.Persistence;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 

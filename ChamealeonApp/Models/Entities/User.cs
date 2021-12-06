@@ -11,6 +11,7 @@ namespace ChamealeonApp.Models.Entities
     {
         //Burhan
         //no Id because Identity creates it by default
+        // public Guid Id { get; set; }
         public string Name { get; set; } //required
         public string Password { get; set; }
         public int Age { get; set; }
