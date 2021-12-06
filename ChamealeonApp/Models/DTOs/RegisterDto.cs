@@ -2,18 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ChamealeonApp.Models;
-using Microsoft.AspNetCore.Identity;
+using ChamealeonApp.Models.Entities;
 
-namespace ChamealeonApp.Models.Entities
+namespace API.Models.DTOs
 {
-    public class User : IdentityUser
+    public class RegisterDto
     {
-        //Burhan
-        //  public Guid Id { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
+        public string UserName { get; set; }
+
         public string Name { get; set; } //required
                                          // public string Email { get; set; } //required
-        public string Password { get; set; }
         public int Age { get; set; }
         public string Gender { get; set; }
         public string Diet { get; set; }
@@ -23,4 +23,3 @@ namespace ChamealeonApp.Models.Entities
         public MealPlan CurrentMealPlan { get; set; }
     }
 }
-

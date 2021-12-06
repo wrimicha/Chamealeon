@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ChamealeonApp.Models.Entities
+namespace API.Models.DTOs
 {
-    public class NutrionalInformation
+    public class UserDto
     {
-        //Amir
+        public string Token { get; set; }
     }
 }
