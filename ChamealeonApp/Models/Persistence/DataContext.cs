@@ -14,6 +14,12 @@ namespace ChamealeonApp.Models.Persistence
     {
         //Burhan
         //navigation properties
+        public DbSet<Ingredient> Ingredients { get; set; }
+        public DbSet<Meal> Meals { get; set; }
+        public DbSet<MealPlan> MealPlans { get; set; }
+        public DbSet<NutrionalInformation> NutrionalInformations { get; set; }
+        // public DbSet<User> Users { get; set; } //TODO: not need?
+        public DbSet<DaysMeal> Days { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
