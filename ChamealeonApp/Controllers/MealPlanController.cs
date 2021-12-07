@@ -58,7 +58,7 @@ namespace ChamealeonApp.Controllers
         public async Task<IActionResult> Get()
         {
             //TODO: Implement Realistic Implementation
-            await SpoonacularAPIHelper.GenerateMealPlanFromSpoonacularAsync("vegetarian", 3000);
+            await SpoonacularAPIHelper.GenerateMealPlanFromSpoonacularAsync(null, new List<string>(), 3000);
     
             return Ok();
         }
