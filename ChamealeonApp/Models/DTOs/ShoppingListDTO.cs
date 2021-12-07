@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ChamealeonApp.Models.Entities;
 
-namespace ChamealeonApp.Models.Entities
+namespace ChamealeonApp.Models.DTOs
 {
-    public class ShoppingList
+    public class ShoppingListDTO
     {
         //mike
 
@@ -14,6 +15,5 @@ namespace ChamealeonApp.Models.Entities
         public double EstimatedTotalCost { get; set; }
 
         public List<Meal> Meals { get; set; }
-
     }
 }

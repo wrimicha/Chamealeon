@@ -17,13 +17,6 @@ namespace ChamealeonApp.Models.Entities
         public string Instructions { get; set; }
         public string Name { get; set; }
         public string ImageUrl { get; set; }
-        public NutrionalInformation NutritionInfo { get; set; }
-
-        //ctor
-        public Meal()
-        {
-            //initialize types
-            Ingredients = new List<Ingredient>();
-        }
+        public NutritionalInformation NutritionInfo { get; set; }
     }
 }

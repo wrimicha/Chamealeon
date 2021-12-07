@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ChamealeonApp.Models.Entities
+namespace ChamealeonApp.Models.DTOs
 {
-    public class NutrionalInformation
+    public class MealPlanQueryDTO
     {
-        //Amir
+        //properties of meal plan query
     }
 }

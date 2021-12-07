@@ -2,7 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using ChamealeonApp.Models.Authentication;
+using ChamealeonApp.Models.DTOs;
+using ChamealeonApp.Models.Entities;
+using ChamealeonApp.Models.Helpers;
+using ChamealeonApp.Models.Persistence;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -13,14 +20,63 @@ namespace ChamealeonApp.Controllers
     public class MealPlanController : Controller
     {
         //burhan
+
+        private readonly DataContext _context;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
+        private readonly TokenService _tokenService;
+
+        public MealPlanController(DataContext context, UserManager<User> userManager,
+            SignInManager<User> signInManager,
+            TokenService tokenService)
+        {
+            _context = context;
+            this._userManager = userManager;
+            this._signInManager = signInManager;
+            _tokenService = tokenService;
+        }
+
         //GET generate weekly meal plan (calls helper API)
+        [HttpGet("getMealPlan")]
+        public async Task<IActionResult> GetMealPlan([FromBody] MealPlanQueryDTO mealPlanQuery)
+        {
+            //call helper to make a request to API and save to the database
 
-        //PUT update a specific meal in the weekly meal plan (needs to get a user defined meal)
-        //helper func: search for user made meal within db
-        //helper func: for multiple suggested meal from (call helper API)
+            //make sure it saves to the user
+            var loggedInUser = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
+            //makeSpoonacularMealPlanRequest(loggedInUser.Id);
 
+            //the database will now have a full meal plan saved
+            var fullMealPlan = _context.MealPlans;
+         
+            return Ok(fullMealPlan);
+        }
+
+
+
+        [HttpGet("test")]
+        public async Task<IActionResult> Get()
+        {
+            //TODO: Implement Realistic Implementation
+            await SpoonacularAPIHelper.GenerateMealPlanFromSpoonacularAsync(null, new List<string>(), 3000);
+    
+            return Ok();
+        }
+
+
+
+        //BURHAN
+        //PUT update a specific meal in the weekly meal plan FROM USER'S MEALS CREATED IN DB
+
+        //Mike
+        //PUT update a specific meal in the weekly meal plan FROM SPOONACULAR REQUEST
+
+
+        //Mike
         //GET meal plan (DB)
 
+
+        //Mike
         //DELETE a meal from the meal plan
     }
 }

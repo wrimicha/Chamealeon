@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using API.Models.DTOs;
 using ChamealeonApp.Models.Authentication;
@@ -32,7 +33,7 @@ namespace ChamealeonApp.Controllers
 
         //register
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
+        public async Task<IActionResult> Register([FromBody] RegisterDTO registerDto)
         {
             var user = new User
             {
@@ -51,7 +52,7 @@ namespace ChamealeonApp.Controllers
 
         // login
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
+        public async Task<IActionResult> Login([FromBody] LoginDTO loginDto)
         {
             var user = await _userManager.FindByEmailAsync(loginDto.Email);
 
@@ -63,7 +64,7 @@ namespace ChamealeonApp.Controllers
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
             if (result.Succeeded)
-                return Ok(new UserDto
+                return Ok(new UserDTO
                 {
                     Token = _tokenService.CreateToken(user)
                 });
@@ -71,11 +72,27 @@ namespace ChamealeonApp.Controllers
             return Unauthorized("Not a good password");
         }
 
-        //amir
-        //create a user
-
         //update user details
+        //burhan
+        [HttpPost]
+        public async Task<IActionResult> UpdateDetails([FromBody] User userModel)
+        {
+
+            var user = await _userManager.FindByIdAsync(userModel.Id);
+            // TODO: find what properties need to be updated
+            // Let's assume email only changed
+            user.Email = userModel.Email;
+            await _userManager.UpdateAsync(user);
+            return Created("", null);
+        }
 
         //delete user
+        //mike
+        [HttpDelete]
+        public async Task<IActionResult> Delete(string id)
+        {
+            await _userManager.DeleteAsync(await _userManager.FindByIdAsync(id));
+            return Ok();
+        }
     }
 }
