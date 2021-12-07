@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using ChamealeonApp.Models.Entities;
+using ChamealeonApp.Models.Helpers;
 using ChamealeonApp.Models.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -46,8 +47,16 @@ namespace ChamealeonApp.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get()
         {
-
+            
             await Task.Yield();
+            return Ok();
+        }
+
+        [HttpGet("Test")]
+        [HttpGet]
+        public async Task<IActionResult> GetTest()
+        {
+            await SpoonacularAPIHelper.GetFullDetailsOfMeal("716429");
             return Ok();
         }
     }
