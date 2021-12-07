@@ -33,7 +33,7 @@ namespace ChamealeonApp.Controllers
 
         //register
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
+        public async Task<IActionResult> Register([FromBody] RegisterDTO registerDto)
         {
             var user = new User
             {
@@ -52,7 +52,7 @@ namespace ChamealeonApp.Controllers
 
         // login
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
+        public async Task<IActionResult> Login([FromBody] LoginDTO loginDto)
         {
             var user = await _userManager.FindByEmailAsync(loginDto.Email);
 
@@ -64,7 +64,7 @@ namespace ChamealeonApp.Controllers
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
             if (result.Succeeded)
-                return Ok(new UserDto
+                return Ok(new UserDTO
                 {
                     Token = _tokenService.CreateToken(user)
                 });
