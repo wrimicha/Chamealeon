@@ -50,8 +50,8 @@ namespace ChamealeonApp.Controllers
 
             var convertedMealPlan = MealPlanResponseHelper.ConvertRootDTOToMealPlan(retrievedRootResponse);
 
-            _context.MealPlans.Add(convertedMealPlan);
-            await _context.SaveChangesAsync();
+            // _context.MealPlans.Add(convertedMealPlan);
+            // await _context.SaveChangesAsync();
 
 
 
@@ -65,7 +65,7 @@ namespace ChamealeonApp.Controllers
             //save the meal plan to the logged in user
             //NOT OK?
             userInDb.CurrentMealPlan = convertedMealPlan;
-            userInDb.CurrentMealPlan.Id = convertedMealPlan.Id;
+            // userInDb.CurrentMealPlan.Id = convertedMealPlan.Id;
             await _context.SaveChangesAsync();
 
             return Ok(convertedMealPlan);

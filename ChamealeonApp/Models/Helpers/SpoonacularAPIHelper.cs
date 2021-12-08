@@ -24,7 +24,7 @@ namespace ChamealeonApp.Models.Helpers
 
         //amir
         //HELPER FUNC: GET full details of selected meal and save to db as a proper Meal object
-        public static async Task<MealRoot> GetFullDetailsOfMeal(string id)
+        public static async Task<MealRoot> GetFullDetailsOfMeal(int id)
         {
             var request = new RestRequest($"recipes/{id}/information").AddParameter("includeNutrition", "true").AddParameter("apiKey", "eaa80ce8fa5c4a2fa1a3c6c875ef9bf5");
             var response = await client.GetAsync<MealRoot>(request);
@@ -42,7 +42,8 @@ namespace ChamealeonApp.Models.Helpers
 
             var request = new RestRequest($"mealplanner/generate").AddParameter("apiKey", "eaa80ce8fa5c4a2fa1a3c6c875ef9bf5").AddParameter("targetCalories", cals.ToString());
 
-            if(diet != null){
+            if (diet != null)
+            {
                 request.AddParameter("diet", diet);
             }
 
