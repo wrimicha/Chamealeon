@@ -20,6 +20,14 @@ namespace ChamealeonApp.Models.Persistence
         // public DbSet<User> Users { get; set; } //TODO: not need?
         //public DbSet<DaysMeal> DaysMeals { get; set; }
 
+        //Had an error with migrations: https://stackoverflow.com/questions/57745481/unable-to-create-an-object-of-type-mycontext-for-the-different-patterns-suppo
+        public DataContext()
+        {
+        }
+        public DataContext(DbContextOptions options) : base(options)
+        {
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //database name will be the one that currently is existing, Data.db

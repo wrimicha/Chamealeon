@@ -42,12 +42,12 @@ namespace ChamealeonApp.Controllers
         //     return Ok();
         // }
 
-        
+
         //GET full details of a meal (screen, has instructions etc)
         [HttpGet("{id}")]
         public async Task<IActionResult> Get()
         {
-            
+
             await Task.Yield();
             return Ok();
         }
@@ -56,7 +56,7 @@ namespace ChamealeonApp.Controllers
         [HttpGet]
         public async Task<IActionResult> GetTest()
         {
-            await SpoonacularAPIHelper.GetFullDetailsOfMeal("716429");
+            await SpoonacularAPIHelper.GetFullDetailsOfMeal(716429);
             return Ok();
         }
     }
