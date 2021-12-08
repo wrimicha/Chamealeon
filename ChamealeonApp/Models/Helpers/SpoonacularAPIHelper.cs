@@ -40,7 +40,16 @@ namespace ChamealeonApp.Models.Helpers
         public static async Task<MealPlanRoot> GenerateMealPlanFromSpoonacularAsync(string diet, List<string> exclude, int cals = 2000)
         {
 
-            var request = new RestRequest($"mealplanner/generate").AddParameter("apiKey", "eaa80ce8fa5c4a2fa1a3c6c875ef9bf5").AddParameter("targetCalories", cals.ToString());
+            var excludeItems = "";
+            for(int i = 0; i < exclude.Count; i++){
+                if(i<exclude.Count-1){
+                    excludeItems += $"{exclude[i]}, ";
+                    continue;
+                } 
+                excludeItems += $"{exclude[i]}";    
+            }
+
+            var request = new RestRequest($"mealplanner/generate").AddParameter("apiKey", "eaa80ce8fa5c4a2fa1a3c6c875ef9bf5").AddParameter("exclude", excludeItems).AddParameter("targetCalories", cals.ToString());
 
             if(diet != null){
                 request.AddParameter("diet", diet);
