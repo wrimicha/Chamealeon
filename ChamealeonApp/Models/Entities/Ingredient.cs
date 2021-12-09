@@ -8,16 +8,16 @@ namespace ChamealeonApp.Models.Entities
     public class Ingredient
     {
         //Mike
-        public Guid Id {get; set;}
+        public Guid Id { get; set; }
 
         //public int SpoonacularMealId {get; set;} ?
         public string Name { get; set; }
 
-        public double Cost { get; set; }
+        // public double Cost { get; set; }
 
-        public List<Meal> Meals {get; set;}
+        // public List<Meal> Meals {get; set;}
 
-        public string ImageUrl{ get; set;}
+        // public string ImageUrl { get; set; }
 
         //public string UnitOfMeasurement { get; set; }
 

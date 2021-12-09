@@ -6,11 +6,13 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using ChamealeonApp.Models.Authentication;
 using ChamealeonApp.Models.DTOs;
+using ChamealeonApp.Models.DTOs.SpoonacularResonseDTOs.GenerateMealPlanDTOs;
 using ChamealeonApp.Models.Entities;
 using ChamealeonApp.Models.Helpers;
 using ChamealeonApp.Models.Persistence;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace ChamealeonApp.Controllers
@@ -38,18 +40,35 @@ namespace ChamealeonApp.Controllers
 
         //GET generate weekly meal plan (calls helper API)
         [HttpGet("getMealPlan")]
+
         public async Task<IActionResult> GetMealPlan([FromBody] MealPlanQueryDTO mealPlanQuery)
         {
+            //TODO: check the list of items to include for any user input errors
+
             //call helper to make a request to API and save to the database
+            var retrievedRootResponse = await SpoonacularAPIHelper.GenerateMealPlanFromSpoonacularAsync(mealPlanQuery.Diet.Trim(), mealPlanQuery.ItemsToExclude, mealPlanQuery.Calories); //TODO: error check if its not an integer
+
+            var convertedMealPlan = MealPlanResponseHelper.ConvertRootDTOToMealPlan(retrievedRootResponse);
+
+            // _context.MealPlans.Add(convertedMealPlan);
+            // await _context.SaveChangesAsync();
+
+
 
             //make sure it saves to the user
             var loggedInUser = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
-            //makeSpoonacularMealPlanRequest(loggedInUser.Id);
 
-            //the database will now have a full meal plan saved
-            var fullMealPlan = _context.MealPlans;
-         
-            return Ok(fullMealPlan);
+            //might need to include nutrition
+            var userInDb = await _context.Users.Include(u => u.CurrentMealPlan).FirstOrDefaultAsync(u => u.Id.Equals(loggedInUser.Id));
+
+            //TODO: CALL AMIR
+            //save the meal plan to the logged in user
+            //NOT OK?
+            userInDb.CurrentMealPlan = convertedMealPlan;
+            // userInDb.CurrentMealPlan.Id = convertedMealPlan.Id;
+            await _context.SaveChangesAsync();
+
+            return Ok(convertedMealPlan);
         }
 
 
@@ -58,8 +77,8 @@ namespace ChamealeonApp.Controllers
         public async Task<IActionResult> Get()
         {
             //TODO: Implement Realistic Implementation
-            await SpoonacularAPIHelper.GenerateMealPlanFromSpoonacularAsync("vegetarian", 3000);
-    
+            await SpoonacularAPIHelper.GenerateMealPlanFromSpoonacularAsync(null, new List<string>(), 3000);
+
             return Ok();
         }
 
