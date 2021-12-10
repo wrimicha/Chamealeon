@@ -110,8 +110,8 @@ namespace ChamealeonApp.Controllers
 
             await _context.SaveChangesAsync();
 
-            //show the updated meal
-            return Ok(loggedInUser.CurrentMealPlan.MealDays[(int)day].Meals[mealIndexInDay]);
+            //show the updated meal for that day
+            return Ok(loggedInUser.CurrentMealPlan.MealDays[(int)day].Meals.ToList());
         }
 
         //Mike
