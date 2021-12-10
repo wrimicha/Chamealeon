@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using API.Models.DTOs;
 using ChamealeonApp.Models.Authentication;
+using ChamealeonApp.Models.DTOs;
 using ChamealeonApp.Models.Entities;
+using ChamealeonApp.Models.Persistence;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace ChamealeonApp.Controllers
@@ -20,15 +25,20 @@ namespace ChamealeonApp.Controllers
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly TokenService _tokenService;
+
+        private readonly DataContext _context;
         public UserController(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
-            TokenService tokenService
+            TokenService tokenService,
+            DataContext context
             )
         {
             this._userManager = userManager;
             this._signInManager = signInManager;
             _tokenService = tokenService;
+
+            _context = context;
         }
 
         //register
@@ -74,15 +84,33 @@ namespace ChamealeonApp.Controllers
 
         //update user details
         //burhan
-        [HttpPost]
-        public async Task<IActionResult> UpdateDetails([FromBody] User userModel)
+        [Authorize]
+        [HttpPut]
+        public async Task<IActionResult> UpdateDetails([FromBody] UserInformationDTO userModel)
         {
+            //find the user
+            var user = await _userManager.Users.Include(u => u.PersonalNutritionalInformationGoal).FirstOrDefaultAsync(us => us.NormalizedEmail
+                .Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
 
-            var user = await _userManager.FindByIdAsync(userModel.Id);
+            //Reference:
             // TODO: find what properties need to be updated
-            // Let's assume email only changed
-            user.Email = userModel.Email;
+            user.Age = int.Equals(userModel.Age, null) ? user.Age : userModel.Age;
+            user.Diet = string.IsNullOrEmpty(userModel.Diet) ? user.Diet : userModel.Diet;
+            user.Weight = double.Equals(userModel.Weight, null) ? user.Weight : userModel.Weight;
+            user.Height = double.Equals(userModel.Height, null) ? user.Height : userModel.Height;
+
+            user.PersonalNutritionalInformationGoal.Calories = double.Equals(userModel.Calories, null) ? user.PersonalNutritionalInformationGoal.Calories : userModel.Calories;
+            user.PersonalNutritionalInformationGoal.Fat = double.Equals(userModel.Fat, null) ? user.PersonalNutritionalInformationGoal.Fat : userModel.Fat;
+            user.PersonalNutritionalInformationGoal.Protein = double.Equals(userModel.Protein, null) ? user.PersonalNutritionalInformationGoal.Protein : userModel.Protein;
+            user.PersonalNutritionalInformationGoal.Carbs = double.Equals(userModel.Carbs, null) ? user.PersonalNutritionalInformationGoal.Carbs : userModel.Carbs;
+            user.PersonalNutritionalInformationGoal.Sodium = double.Equals(userModel.Sodium, null) ? user.PersonalNutritionalInformationGoal.Sodium : userModel.Sodium;
+            user.PersonalNutritionalInformationGoal.Sugar = double.Equals(userModel.Sugar, null) ? user.PersonalNutritionalInformationGoal.Sugar : userModel.Sugar;
+
+
             await _userManager.UpdateAsync(user);
+
+            //TODO: not sure if it reflects the change
+            await _context.SaveChangesAsync();
             return Created("", null);
         }
 

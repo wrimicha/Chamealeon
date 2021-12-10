@@ -18,5 +18,10 @@ namespace ChamealeonApp.Models.Entities
         public string Name { get; set; }
         public string ImageUrl { get; set; }
         public NutritionalInformation NutritionInfo { get; set; }
+
+        public static implicit operator Meal(Task<Meal> v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
