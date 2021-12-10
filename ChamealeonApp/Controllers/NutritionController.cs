@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 using ChamealeonApp.Models.Authentication;
 using ChamealeonApp.Models.Entities;
 using ChamealeonApp.Models.Persistence;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ChamealeonApp.Controllers
 {
@@ -30,9 +32,8 @@ namespace ChamealeonApp.Controllers
         }
         //burhan
         //GET weekly nutrional information (macros) from db for the week
-
-        /*
-         [HttpGet("weeklyInformation")]
+        [Authorize]
+        [HttpGet("weeklyInformation")]
         public async Task<IActionResult> GetWeeklyNutritionalInformation()
         {
             //create an object of nutrional information to send to the view
@@ -40,7 +41,25 @@ namespace ChamealeonApp.Controllers
 
             //create a list of the user's meals
             //TODO: does it need .Include?
-            var currentUser = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
+            //get the logged in user 
+            var loggedInUser = await _userManager.Users.Include(u => u.CurrentMealPlan).ThenInclude(m => m.MealDays).ThenInclude(md => md.Meals).ThenInclude(meals => meals.NutritionInfo)
+            .FirstOrDefaultAsync(us => us.NormalizedEmail
+            .Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
+
+            //in the meal plan, iterate through each day
+            //in each day, iterate through each of the 3 meals
+            //in each meal, add the macros
+            foreach (var day in loggedInUser.CurrentMealPlan.MealDays)
+            {
+                foreach (var meals in day.Meals)
+                {
+                    totalNutritionalInformation.Calories += meals.NutritionInfo.Calories;
+                    totalNutritionalInformation.Carbs += meals.NutritionInfo.Carbs;
+                    totalNutritionalInformation.Fat += meals.NutritionInfo.Fat;
+                    totalNutritionalInformation.Protein += meals.NutritionInfo.Protein;
+                }
+            }
+
 
 
             //go through the entire nutrional information table
@@ -56,10 +75,10 @@ namespace ChamealeonApp.Controllers
 
             //OR
             //might need .include()
-            totalNutritionalInformation.Calories = currentUser.CurrentMealPlan.NutritionalInformations.Sum(n => n.Calories);
-            totalNutritionalInformation.Carbohydrates = _context.NutritionalInformations.Sum(n => n.Carbohydrates);
-            totalNutritionalInformation.Fat = _context.NutritionalInformations.Sum(n => n.Fat);
-            totalNutritionalInformation.Protein = _context.NutritionalInformations.Sum(n => n.Protein);
+            // totalNutritionalInformation.Calories = loggedInUser.CurrentMealPlan.MealDays.Max.Sum(n => n.Calories);
+            // totalNutritionalInformation.Carbohydrates = _context.NutritionalInformations.Sum(n => n.Carbohydrates);
+            // totalNutritionalInformation.Fat = _context.NutritionalInformations.Sum(n => n.Fat);
+            // totalNutritionalInformation.Protein = _context.NutritionalInformations.Sum(n => n.Protein);
 
             //display entire object to view where each attribute can be accessed
             return Ok(totalNutritionalInformation);
@@ -78,16 +97,28 @@ namespace ChamealeonApp.Controllers
             //find the nutritional information for the specific day
 
             //create a list of the user's meals
-            //TODO: does it need .Include?
-            var currentUser = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
-            var nutritionalInformationForTheDay = currentUser.CurrentMealPlan.Include(m => m.NutrionalInformation).Where(mp => mp.Day.ToLower().Equals(day.ToLower().Trim()));
-            //var nutritionalInformationForTheDay = _context.MealPlan.Include(m => m.NutrionalInformation).Where(mp => mp.Day.ToLower().Equals(day.ToLower().Trim()));
+            var loggedInUser = await _userManager.Users.Include(u => u.CurrentMealPlan).ThenInclude(m => m.MealDays).ThenInclude(md => md.Meals).ThenInclude(meals => meals.NutritionInfo)
+            .FirstOrDefaultAsync(us => us.NormalizedEmail
+            .Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
 
+            var mealPlanDay = loggedInUser.CurrentMealPlan.MealDays
+            .Where(mealDays => mealDays.Day.ToString().Equals(day.ToLower().Trim()));
+            //var nutritionalInformationForTheDay = _context.MealPlan.Include(m => m.NutrionalInformation).Where(mp => mp.Day.ToLower().Equals(day.ToLower().Trim()));
+            var nutritionalInformationForTheDay = new NutritionalInformation
+            {
+
+                Calories = mealPlanDay.FirstOrDefault().Meals.Sum(meal => meal.NutritionInfo.Calories),
+                Carbs = mealPlanDay.FirstOrDefault().Meals.Sum(meal => meal.NutritionInfo.Carbs),
+                Protein = mealPlanDay.FirstOrDefault().Meals.Sum(meal => meal.NutritionInfo.Protein),
+                Sodium = mealPlanDay.FirstOrDefault().Meals.Sum(meal => meal.NutritionInfo.Sodium),
+                Sugar = mealPlanDay.FirstOrDefault().Meals.Sum(meal => meal.NutritionInfo.Sugar),
+                Fat = mealPlanDay.FirstOrDefault().Meals.Sum(meal => meal.NutritionInfo.Fat)
+
+            };
             //display entire object to view where each attribute can be accessed
-            return Ok(totalNutritionalInformation);
-            return Ok();
+            return Ok(nutritionalInformationForTheDay);
         }
-        */
+
 
 
     }
