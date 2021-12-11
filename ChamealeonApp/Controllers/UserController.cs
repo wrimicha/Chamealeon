@@ -48,13 +48,20 @@ namespace ChamealeonApp.Controllers
             var user = new User
             {
                 Email = registerDto.Email,
-                UserName = registerDto.UserName
+                UserName = registerDto.UserName,
+                Age = registerDto.Age,
+                Gender = registerDto.Gender.Trim(),
+                Diet = registerDto.Diet.Trim(),
+                Weight = registerDto.Weight,
+                Height = registerDto.Height,
+                PersonalNutritionalInformationGoal = registerDto.PersonalNutritionalInformationGoal
             };
+            // user.PersonalNutritionalInformationGoal.Calories *= 7;
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);
 
             if (result.Succeeded)
-                return Ok();
+                return Ok(result);
 
             return BadRequest(result.Errors);
         }
@@ -85,7 +92,7 @@ namespace ChamealeonApp.Controllers
         //update user details
         //burhan
         [Authorize]
-        [HttpPut]
+        [HttpPut("update")]
         public async Task<IActionResult> UpdateDetails([FromBody] UserInformationDTO userModel)
         {
             //find the user
@@ -100,11 +107,11 @@ namespace ChamealeonApp.Controllers
             user.Height = double.Equals(userModel.Height, null) ? user.Height : userModel.Height;
 
             user.PersonalNutritionalInformationGoal.Calories = double.Equals(userModel.Calories, null) ? user.PersonalNutritionalInformationGoal.Calories : userModel.Calories;
-            user.PersonalNutritionalInformationGoal.Fat = double.Equals(userModel.Fat, null) ? user.PersonalNutritionalInformationGoal.Fat : userModel.Fat;
-            user.PersonalNutritionalInformationGoal.Protein = double.Equals(userModel.Protein, null) ? user.PersonalNutritionalInformationGoal.Protein : userModel.Protein;
-            user.PersonalNutritionalInformationGoal.Carbs = double.Equals(userModel.Carbs, null) ? user.PersonalNutritionalInformationGoal.Carbs : userModel.Carbs;
-            user.PersonalNutritionalInformationGoal.Sodium = double.Equals(userModel.Sodium, null) ? user.PersonalNutritionalInformationGoal.Sodium : userModel.Sodium;
-            user.PersonalNutritionalInformationGoal.Sugar = double.Equals(userModel.Sugar, null) ? user.PersonalNutritionalInformationGoal.Sugar : userModel.Sugar;
+            // user.PersonalNutritionalInformationGoal.Fat = double.Equals(userModel.Fat, null) ? user.PersonalNutritionalInformationGoal.Fat : userModel.Fat;
+            // user.PersonalNutritionalInformationGoal.Protein = double.Equals(userModel.Protein, null) ? user.PersonalNutritionalInformationGoal.Protein : userModel.Protein;
+            // user.PersonalNutritionalInformationGoal.Carbs = double.Equals(userModel.Carbs, null) ? user.PersonalNutritionalInformationGoal.Carbs : userModel.Carbs;
+            // user.PersonalNutritionalInformationGoal.Sodium = double.Equals(userModel.Sodium, null) ? user.PersonalNutritionalInformationGoal.Sodium : userModel.Sodium;
+            // user.PersonalNutritionalInformationGoal.Sugar = double.Equals(userModel.Sugar, null) ? user.PersonalNutritionalInformationGoal.Sugar : userModel.Sugar;
 
 
             await _userManager.UpdateAsync(user);
@@ -116,10 +123,15 @@ namespace ChamealeonApp.Controllers
 
         //delete user
         //mike
-        [HttpDelete]
+        [Authorize]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
             await _userManager.DeleteAsync(await _userManager.FindByIdAsync(id));
+
+            //TODO: delete associated meal plan
+
+            //await _context.SaveChangesAsync();
             return Ok();
         }
     }
