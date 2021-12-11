@@ -120,6 +120,35 @@ namespace ChamealeonApp.Controllers
         //Mike
         //PUT update a specific meal in the 
         //TODO: search for any meal in spoonacular, needs a helper method
+        // [Authorize]
+        // [HttpPut("updateMealPlanWithSpoonacularMeal")]
+        // public async Task<IActionResult> UpdateMealPlanWithSpoonacularMeal(string mealId, DayOfWeek day, int mealIndexInDay)
+        // {
+
+        //     //TODO: Gets the meal in the meal plan and recplaces it with the choosen meal
+
+
+        //     //make sure it saves to the user
+        //     //get the logged in user 
+        //     var loggedInUser = await _userManager.Users.Include(u => u.CurrentMealPlan).ThenInclude(m => m.MealDays).ThenInclude(md => md.Meals).FirstOrDefaultAsync(us => us.NormalizedEmail
+        //     .Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
+
+        //     //find the meal in the database that they want to replace with
+        //     //the spoonacular id should be empty if its a user defined meal
+        //     var mealInDb = _context.Meals.Where(m => string.IsNullOrEmpty(m.SpoonacularMealId.ToString()) == true)
+        //     .FirstOrDefaultAsync(userMeals => userMeals.Id.Equals(new Guid(mealId.Trim())));
+
+        //     //replace the user meal with the new meal
+        //     //get the meal plan, get the day of the week, get the meal object in the list of meals for that day
+        //     loggedInUser.CurrentMealPlan.MealDays[(int)day].Meals[mealIndexInDay] = await mealInDb;
+
+        //     await _context.SaveChangesAsync();
+
+        //     //show the updated meal for that day
+        //     return Ok(loggedInUser.CurrentMealPlan.MealDays[(int)day].Meals.ToList());
+        // }
+
+
 
 
         //Mike

@@ -8,7 +8,7 @@ using ChamealeonApp.Models.Entities;
 using RestSharp;
 using MealRoot = ChamealeonApp.Models.DTOs.SpoonacularResonseDTOs.MealByIdDTOs.Root;
 using MealPlanRoot = ChamealeonApp.Models.DTOs.SpoonacularResonseDTOs.GenerateMealPlanDTOs.Root;
-
+using SearchRoot = ChamealeonApp.Models.DTOs.SpoonacularResonseDTOs.SearchForRecipeDTOs.Root; //Classes generated from: https://json2csharp.com/json-to-csharp
 
 namespace ChamealeonApp.Models.Helpers
 {
@@ -62,5 +62,27 @@ namespace ChamealeonApp.Models.Helpers
             return response;
 
         }
+
+
+         //Mike
+         //TODO: make 3 overloads
+        public static async Task<SearchRoot> GetMealSuggestions(string diet, string mealType, string query)
+        {
+            var request = new RestRequest($"recipes/complexSearch").AddParameter("apiKey", "eaa80ce8fa5c4a2fa1a3c6c875ef9bf5").AddParameter("query", query).AddParameter("addRecipeNutrition", true);
+
+            if (diet != null)
+            {
+                request.AddParameter("diet", diet);
+            }
+            if (mealType != null)
+            {
+                request.AddParameter("type", mealType);
+            }
+
+            var response = await client.GetAsync<SearchRoot>(request);
+            return response;
+
+        }
+
     }
 }
