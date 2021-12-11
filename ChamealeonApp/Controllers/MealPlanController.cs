@@ -12,6 +12,7 @@ using ChamealeonApp.Models.Persistence;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace ChamealeonApp.Controllers
@@ -24,30 +25,46 @@ namespace ChamealeonApp.Controllers
 
         private readonly DataContext _context;
         private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
-        private readonly TokenService _tokenService;
+        // private readonly SignInManager<User> _signInManager;
+        // private readonly TokenService _tokenService;
 
-        public MealPlanController(DataContext context, UserManager<User> userManager,
-            SignInManager<User> signInManager,
-            TokenService tokenService)
+        public MealPlanController(DataContext context, UserManager<User> userManager
+            // SignInManager<User> signInManager,
+            // TokenService tokenService
+            )
         {
             _context = context;
             this._userManager = userManager;
-            this._signInManager = signInManager;
-            _tokenService = tokenService;
+            // this._signInManager = signInManager;
+            // _tokenService = tokenService;
         }
 
-        //GET generate weekly meal plan (calls helper API)
+        //make weekly meal plan (calls helper API)
         [Authorize]
-        [HttpPost("getMealPlan")]
-        public async Task<IActionResult> GetMealPlan([FromBody] MealPlanQueryDTO mealPlanQuery)
+        [HttpPost("generateMealPlan")]
+        public async Task<IActionResult> GenereateMealPlan([FromBody] MealPlanQueryDTO mealPlanQuery)
         {
-            //call helper to make a request to API and save to the database
-
             //make sure it saves to the user
             //get the logged in user 
-            var loggedInUser = await _userManager.Users.Include(u => u.CurrentMealPlan).FirstOrDefaultAsync(us => us.NormalizedEmail
+            var loggedInUser = await _userManager.Users.Include(u => u.CurrentMealPlan).Include(u => u.PersonalNutritionalInformationGoal).FirstOrDefaultAsync(us => us.NormalizedEmail
             .Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
+
+            //set the query to the users goals
+
+
+            //TODO: check the list of items to include for any user input errors
+
+            //call helper to make a request to API and save to the database
+            var retrievedRootResponse = await SpoonacularAPIHelper.GenerateMealPlanFromSpoonacularAsync(loggedInUser.Diet.Trim(), mealPlanQuery.ItemsToExclude, loggedInUser.PersonalNutritionalInformationGoal.Calories); //TODO: error check if its not an integer
+
+            var convertedMealPlan = await MealPlanResponseHelper.ConvertRootDTOToMealPlanAsync(retrievedRootResponse, _context);
+
+            // _context.MealPlans.Add(convertedMealPlan);
+            // await _context.SaveChangesAsync();
+
+
+
+
 
             //might need to include nutrition
             // var userInDb = await _context.Users.Include(u => u.CurrentMealPlan).FirstOrDefaultAsync(u => u.Id.Equals(loggedInUser.Id));
@@ -62,14 +79,14 @@ namespace ChamealeonApp.Controllers
 
 
 
-        [HttpGet("test")]
-        public async Task<IActionResult> Get()
-        {
-            //TODO: Implement Realistic Implementation
-            var result = await SpoonacularAPIHelper.GenerateMealPlanFromSpoonacularAsync(null, new List<string>{"shellfish", "olives", "chicken", "cheese", ""}, 3000);
-    
-            return Ok(result);
-        }
+        // [HttpGet("test")]
+        // public async Task<IActionResult> Get()
+        // {
+        //     //TODO: Implement Realistic Implementation
+        //     var result = await SpoonacularAPIHelper.GenerateMealPlanFromSpoonacularAsync(null, new List<string> { "shellfish", "olives", "chicken", "cheese", "" }, 3000);
+
+        //     return Ok(result);
+        // }
 
 
         //BURHAN
@@ -101,7 +118,37 @@ namespace ChamealeonApp.Controllers
         }
 
         //Mike
-        //PUT update a specific meal in the weekly meal plan FROM SPOONACULAR REQUEST
+        //PUT update a specific meal in the 
+        //TODO: search for any meal in spoonacular, needs a helper method
+        // [Authorize]
+        // [HttpPut("updateMealPlanWithSpoonacularMeal")]
+        // public async Task<IActionResult> UpdateMealPlanWithSpoonacularMeal(string mealId, DayOfWeek day, int mealIndexInDay)
+        // {
+
+        //     //TODO: Gets the meal in the meal plan and recplaces it with the choosen meal
+
+
+        //     //make sure it saves to the user
+        //     //get the logged in user 
+        //     var loggedInUser = await _userManager.Users.Include(u => u.CurrentMealPlan).ThenInclude(m => m.MealDays).ThenInclude(md => md.Meals).FirstOrDefaultAsync(us => us.NormalizedEmail
+        //     .Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
+
+        //     //find the meal in the database that they want to replace with
+        //     //the spoonacular id should be empty if its a user defined meal
+        //     var mealInDb = _context.Meals.Where(m => string.IsNullOrEmpty(m.SpoonacularMealId.ToString()) == true)
+        //     .FirstOrDefaultAsync(userMeals => userMeals.Id.Equals(new Guid(mealId.Trim())));
+
+        //     //replace the user meal with the new meal
+        //     //get the meal plan, get the day of the week, get the meal object in the list of meals for that day
+        //     loggedInUser.CurrentMealPlan.MealDays[(int)day].Meals[mealIndexInDay] = await mealInDb;
+
+        //     await _context.SaveChangesAsync();
+
+        //     //show the updated meal for that day
+        //     return Ok(loggedInUser.CurrentMealPlan.MealDays[(int)day].Meals.ToList());
+        // }
+
+
 
 
         //Mike

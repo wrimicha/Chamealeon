@@ -14,10 +14,10 @@ namespace ChamealeonApp.Models.DTOs
         public double Height { get; set; } //metric or imperial?
                                            //nutrtional information
         public double Calories { get; set; }
-        public double Fat { get; set; }
-        public double Protein { get; set; }
-        public double Carbs { get; set; }
-        public double Sodium { get; set; }
-        public double Sugar { get; set; }
+        // public double Fat { get; set; }
+        // public double Protein { get; set; }
+        // public double Carbs { get; set; }
+        // public double Sodium { get; set; }
+        // public double Sugar { get; set; }
     }
 }

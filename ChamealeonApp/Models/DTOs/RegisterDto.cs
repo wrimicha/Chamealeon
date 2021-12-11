@@ -19,7 +19,7 @@ namespace API.Models.DTOs
         public string Diet { get; set; }
         public double Weight { get; set; } //metric or imperial?
         public double Height { get; set; } //metric or imperial?
-        public NutritionalInformation PersonalNutritionalInformationGoal { get; set; } //personal goals
+        public NutritionalInformation PersonalNutritionalInformationGoal { get; set; } //personal goals, only set calories for the week 
         public MealPlan CurrentMealPlan { get; set; }
     }
 }

@@ -19,16 +19,17 @@ namespace ChamealeonApp.Controllers
     {
         private readonly DataContext _context;
         private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
-        private readonly TokenService _tokenService;
-        public NutritionController(DataContext context, UserManager<User> userManager,
-            SignInManager<User> signInManager,
-            TokenService tokenService)
+        // private readonly SignInManager<User> _signInManager;
+        // private readonly TokenService _tokenService;
+        public NutritionController(DataContext context, UserManager<User> userManager
+            // SignInManager<User> signInManager,
+            // TokenService tokenService
+            )
         {
             _context = context;
             this._userManager = userManager;
-            this._signInManager = signInManager;
-            _tokenService = tokenService;
+            // this._signInManager = signInManager;
+            // _tokenService = tokenService;
         }
         //burhan
         //GET weekly nutrional information (macros) from db for the week
@@ -57,6 +58,9 @@ namespace ChamealeonApp.Controllers
                     totalNutritionalInformation.Carbs += meals.NutritionInfo.Carbs;
                     totalNutritionalInformation.Fat += meals.NutritionInfo.Fat;
                     totalNutritionalInformation.Protein += meals.NutritionInfo.Protein;
+                    totalNutritionalInformation.Sodium += meals.NutritionInfo.Sodium;
+                    totalNutritionalInformation.Sugar += meals.NutritionInfo.Sugar;
+
                 }
             }
 
@@ -85,6 +89,7 @@ namespace ChamealeonApp.Controllers
         }
 
         //GET weekly nutrional information (macros) from db for the day
+        [Authorize]
         [HttpGet("dailyInformation")]
         public async Task<IActionResult> GetDailyNutritionalInformation([FromQuery] string day)
         {
@@ -102,7 +107,7 @@ namespace ChamealeonApp.Controllers
             .Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
 
             var mealPlanDay = loggedInUser.CurrentMealPlan.MealDays
-            .Where(mealDays => mealDays.Day.ToString().Equals(day.ToLower().Trim()));
+            .Where(mealDays => mealDays.Day == Enum.Parse<DayOfWeek>(day));
             //var nutritionalInformationForTheDay = _context.MealPlan.Include(m => m.NutrionalInformation).Where(mp => mp.Day.ToLower().Equals(day.ToLower().Trim()));
             var nutritionalInformationForTheDay = new NutritionalInformation
             {
