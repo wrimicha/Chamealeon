@@ -12,6 +12,7 @@ using ChamealeonApp.Models.Persistence;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace ChamealeonApp.Controllers
@@ -42,7 +43,17 @@ namespace ChamealeonApp.Controllers
         [HttpPost("getMealPlan")]
         public async Task<IActionResult> GetMealPlan([FromBody] MealPlanQueryDTO mealPlanQuery)
         {
+            //TODO: check the list of items to include for any user input errors
+
             //call helper to make a request to API and save to the database
+            var retrievedRootResponse = await SpoonacularAPIHelper.GenerateMealPlanFromSpoonacularAsync(mealPlanQuery.Diet.Trim(), mealPlanQuery.ItemsToExclude, mealPlanQuery.Calories); //TODO: error check if its not an integer
+
+            var convertedMealPlan = MealPlanResponseHelper.ConvertRootDTOToMealPlan(retrievedRootResponse);
+
+            // _context.MealPlans.Add(convertedMealPlan);
+            // await _context.SaveChangesAsync();
+
+
 
             //make sure it saves to the user
             //get the logged in user 
@@ -66,8 +77,8 @@ namespace ChamealeonApp.Controllers
         public async Task<IActionResult> Get()
         {
             //TODO: Implement Realistic Implementation
-            var result = await SpoonacularAPIHelper.GenerateMealPlanFromSpoonacularAsync(null, new List<string>{"shellfish", "olives", "chicken", "cheese", ""}, 3000);
-    
+            var result = await SpoonacularAPIHelper.GenerateMealPlanFromSpoonacularAsync(null, new List<string> { "shellfish", "olives", "chicken", "cheese", "" }, 3000);
+
             return Ok(result);
         }
 
