@@ -155,12 +155,15 @@ namespace ChamealeonApp.Controllers
         public async Task<IActionResult> GetMealPlanFromDb()
         {
 
+
+            var meals = _context.Meals.Find(new Guid("33c431a1-c71a-481a-bd31-ad98fc124419"));
+
             //TODO: Add Error Checking
 
             //get the user meals order by the day of the week
             var loggedInUser = await _userManager.Users
                                                  .Include(u => u.CurrentMealPlan)
-                                                 .ThenInclude(m => m.MealDays.OrderBy(md=>md.Day))
+                                                 .ThenInclude(m => m.MealDays.OrderBy(md=>md.Day)) //.OrderBy(md=>md.Day) - Don't need this days already in order
                                                  .ThenInclude(md => md.Meals)
                                                  .FirstOrDefaultAsync(us => us.NormalizedEmail
                                                  .Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
@@ -173,5 +176,33 @@ namespace ChamealeonApp.Controllers
 
         //Mike
         //DELETE a meal from the meal plan
+        [Authorize]
+        [HttpDelete("removeMealFromMealPlan")]
+        //user needs to pass int of enum of DaysOfWeek (ex 3 = wednesday)
+        public async Task<IActionResult> DeleteMealFromMealPlan(DayOfWeek day, int mealIndexInDay)
+        {
+
+            //TODO: Add Error Checking
+
+            //get the user meals order by the day of the week
+            var loggedInUser = await _userManager.Users
+                                                 .Include(u => u.CurrentMealPlan)
+                                                 .ThenInclude(m => m.MealDays)
+                                                 .ThenInclude(md => md.Meals)
+                                                 .FirstOrDefaultAsync(us => us.NormalizedEmail
+                                                 .Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
+
+            //find the meal in the mealplan
+            //var mealToDelete = loggedInUser.CurrentMealPlan.MealDays[(int)day].Meals[mealIndexInDay];
+            var mealToDelete = loggedInUser.CurrentMealPlan.MealDays.FirstOrDefault(md => (((int)md.Day).Equals((int)day))).Meals[mealIndexInDay];
+
+            //delete the meal
+            loggedInUser.CurrentMealPlan.MealDays[(int)day].Meals.Remove(mealToDelete);
+
+            //update the database        
+            await _context.SaveChangesAsync();
+
+            return Ok(mealToDelete);
+        }
     }
 }
