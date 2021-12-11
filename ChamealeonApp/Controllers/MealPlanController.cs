@@ -78,17 +78,6 @@ namespace ChamealeonApp.Controllers
         }
 
 
-
-        // [HttpGet("test")]
-        // public async Task<IActionResult> Get()
-        // {
-        //     //TODO: Implement Realistic Implementation
-        //     var result = await SpoonacularAPIHelper.GenerateMealPlanFromSpoonacularAsync(null, new List<string> { "shellfish", "olives", "chicken", "cheese", "" }, 3000);
-
-        //     return Ok(result);
-        // }
-
-
         //BURHAN
         //PUT update a specific meal in the weekly meal plan FROM USER'S MEALS CREATED IN DB
         //GET generate weekly meal plan (calls helper API)
@@ -147,16 +136,12 @@ namespace ChamealeonApp.Controllers
             return Ok(loggedInUser.CurrentMealPlan.MealDays[(int)day].Meals.ToList());
         }
 
-
         //Mike
         //GET meal plan (DB)
         [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetMealPlanFromDb()
         {
-
-
-            var meals = _context.Meals.Find(new Guid("33c431a1-c71a-481a-bd31-ad98fc124419"));
 
             //TODO: Add Error Checking
 
@@ -165,6 +150,7 @@ namespace ChamealeonApp.Controllers
                                                  .Include(u => u.CurrentMealPlan)
                                                  .ThenInclude(m => m.MealDays.OrderBy(md=>md.Day)) //.OrderBy(md=>md.Day) - Don't need this days already in order
                                                  .ThenInclude(md => md.Meals)
+                                                 .ThenInclude(i => i.Ingredients)
                                                  .FirstOrDefaultAsync(us => us.NormalizedEmail
                                                  .Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
 
