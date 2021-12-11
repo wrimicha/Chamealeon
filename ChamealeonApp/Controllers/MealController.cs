@@ -38,6 +38,7 @@ namespace ChamealeonApp.Controllers
             //TODO: this route only creates a meal, does not add it to meal plan.
             //UpdateMealPlanWithUserMeal in MealPlanController does that
 
+            //TODO: append the meal to the logged in user's custom meal list
 
             //TODO error check
             var user = await _userManager.Users.Include(x => x.CurrentMealPlan).FirstOrDefaultAsync(x => x.NormalizedEmail.Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));

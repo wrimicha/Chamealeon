@@ -21,6 +21,7 @@ namespace ChamealeonApp.Models.Entities
         public double Height { get; set; } //metric or imperial?
         public NutritionalInformation PersonalNutritionalInformationGoal { get; set; } //personal goals
         public MealPlan CurrentMealPlan { get; set; }
+        public List<Meal> UserCreatedMeals { get; set; }
     }
 }
 

@@ -30,8 +30,21 @@ namespace ChamealeonApp.Controllers
             this._userManager = userManager;
         }
 
+        //display a list of user meals to the user so that they can select one
+        [Authorize]
+        [HttpGet("displayUserMeals")]
+        public async Task<IActionResult> GetMealDetails()
+        {
+            var loggedInUser = await _userManager.Users.Include(u => u.CurrentMealPlan).ThenInclude(m => m.MealDays).ThenInclude(md => md.Meals).FirstOrDefaultAsync(us => us.NormalizedEmail
+           .Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
 
-        
+            //list of user meals
+            var userMeals = loggedInUser.UserCreatedMeals;
+
+            return Ok(userMeals);
+        }
+
+
 
 
     }
