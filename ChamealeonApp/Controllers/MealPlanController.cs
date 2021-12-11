@@ -150,14 +150,26 @@ namespace ChamealeonApp.Controllers
 
         //Mike
         //GET meal plan (DB)
-        // [Authorize]
-        // [HttpGet]
-        // public async Task<IActionResult> GetMealPlanFromDb()
-        // {
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> GetMealPlanFromDb()
+        {
 
-            
-        //     return Ok();
-        // }
+            //TODO: Add Error Checking
+
+            //get the user meals order by the day of the week
+            var loggedInUser = await _userManager.Users
+                                                 .Include(u => u.CurrentMealPlan)
+                                                 .ThenInclude(m => m.MealDays.OrderBy(md=>md.Day))
+                                                 .ThenInclude(md => md.Meals)
+                                                 .FirstOrDefaultAsync(us => us.NormalizedEmail
+                                                 .Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
+
+            //get the user's meal plan
+            var mealPlan = loggedInUser.CurrentMealPlan;
+
+            return Ok(mealPlan);
+        }
 
         //Mike
         //DELETE a meal from the meal plan
