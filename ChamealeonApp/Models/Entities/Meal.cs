@@ -11,7 +11,7 @@ namespace ChamealeonApp.Models.Entities
         public Guid Id { get; set; }
         public int SpoonacularMealId { get; set; }
         public List<Ingredient> Ingredients { get; set; } //many to many
-        public string MealType { get; set; }
+        //public string MealType { get; set; }
         public double Cost { get; set; }
         public double PrepTime { get; set; }
         public string Instructions { get; set; }
@@ -19,9 +19,5 @@ namespace ChamealeonApp.Models.Entities
         public string ImageUrl { get; set; }
         public NutritionalInformation NutritionInfo { get; set; }
 
-        public static implicit operator Meal(Task<Meal> v)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
