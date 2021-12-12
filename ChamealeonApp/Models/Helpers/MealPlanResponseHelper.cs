@@ -32,7 +32,7 @@ namespace ChamealeonApp.Models.Helpers
 
             //use select to map the nutrition to ingredients
             //TODO: no cost avail and image is not the url, its a file name
-            ingredients = spoonacularMeal.extendedIngredients.Select(i => new Ingredient { Name = i.nameClean }).ToList();
+            ingredients = spoonacularMeal.extendedIngredients.Select(i => new Ingredient { Name = i.nameClean, UnitOfMeasurement = i.measures.us.unitShort, Amount = i.measures.us.amount }).ToList();
             convertedMeal.Ingredients = ingredients;
             //map the nutrional information
             double cals = 0;

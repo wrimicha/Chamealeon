@@ -19,9 +19,9 @@ namespace ChamealeonApp.Models.Entities
 
         // public string ImageUrl { get; set; }
 
-        //public string UnitOfMeasurement { get; set; }
+        public string UnitOfMeasurement { get; set; }
 
-        //public double Amount { get; set; }
+        public double Amount { get; set; }
 
         //public NutritionalInformation nutritionalInformation {get; set;}
     }
