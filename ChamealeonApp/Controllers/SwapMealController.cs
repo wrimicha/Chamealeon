@@ -30,6 +30,7 @@ namespace ChamealeonApp.Controllers
             this._userManager = userManager;
         }
 
+        //BURHAN
         //display a list of user meals to the user so that they can select one
         [Authorize]
         [HttpGet("displayUserMeals")]
@@ -45,7 +46,15 @@ namespace ChamealeonApp.Controllers
         }
 
 
+        //MIKE
+        [Authorize]
+        [HttpGet("displaySpoonacularMeals")]
+        public async Task<IActionResult> GetSpoonacularMealDetails(string query)
+        {
+            //TODO: accept values for other filter criteria
+            var suggestions = await SpoonacularAPIHelper.GetMealSuggestions(query);
 
-
+            return Ok(suggestions);
+        }
     }
 }
