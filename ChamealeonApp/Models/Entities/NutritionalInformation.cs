@@ -11,7 +11,7 @@ namespace ChamealeonApp.Models.Entities
         public Guid Id { get; set; }
         public double Calories { get; set; }
         public double Fat { get; set; }
-        public double Protein { get; set; } //TODO: fix naming
+        public double Protein { get; set; }
         public double Carbs { get; set; }
         public double Sodium { get; set; }
         public double Sugar { get; set; }

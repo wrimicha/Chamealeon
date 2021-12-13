@@ -41,7 +41,6 @@ namespace ChamealeonApp.Controllers
             var totalNutritionalInformation = new NutritionalInformation();
 
             //create a list of the user's meals
-            //TODO: does it need .Include?
             //get the logged in user 
             var loggedInUser = await _userManager.Users.Include(u => u.CurrentMealPlan).ThenInclude(m => m.MealDays).ThenInclude(md => md.Meals).ThenInclude(meals => meals.NutritionInfo)
             .FirstOrDefaultAsync(us => us.NormalizedEmail
