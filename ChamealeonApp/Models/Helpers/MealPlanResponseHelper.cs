@@ -4,18 +4,27 @@ using System.Linq;
 using System.Threading.Tasks;
 using ChamealeonApp.Models.DTOs.SpoonacularResonseDTOs.GenerateMealPlanDTOs;
 using ChamealeonApp.Models.Entities;
+using ChamealeonApp.Models.Persistence;
 
 namespace ChamealeonApp.Models.Helpers
 {
     public static class MealPlanResponseHelper
     {
-        public static Models.Entities.Meal ConvertSpoonacularMealToFullMeal(int spoonacularId)
+
+        public static async Task<Entities.Meal> ConvertSpoonacularMealToFullMealAsync(int spoonacularId, DataContext context)
         {
             //create a meal object out of this meal and save to database
             var convertedMeal = new Entities.Meal();
 
             //1. get the FULL meal details from spoonacular using the mealplan meal id
-            var spoonacularMeal = SpoonacularAPIHelper.GetFullDetailsOfMeal(spoonacularId);
+            //check if the spoonacular meal exists already
+            var spoonacularMeal = await SpoonacularAPIHelper.GetFullDetailsOfMeal(spoonacularId);
+            if (context.Meals.Any(m => m.SpoonacularMealId.Equals(spoonacularMeal.id)))
+            {
+                //TODO: meals are duplicated even if they already exist. fix that
+                //meal already exists in db so dont need to add everything again
+                return context.Meals.FirstOrDefault(m => m.SpoonacularMealId.Equals(spoonacularId));
+            }
 
             //2. convert the detailed meal into a full meal
             List<Ingredient> ingredients = new List<Ingredient>();
@@ -23,7 +32,7 @@ namespace ChamealeonApp.Models.Helpers
 
             //use select to map the nutrition to ingredients
             //TODO: no cost avail and image is not the url, its a file name
-            ingredients = (List<Ingredient>)spoonacularMeal.Result.extendedIngredients.Select(i => new Ingredient { Name = i.nameClean });
+            ingredients = spoonacularMeal.extendedIngredients.Select(i => new Ingredient { Name = i.nameClean }).ToList();
             convertedMeal.Ingredients = ingredients;
             //map the nutrional information
             double cals = 0;
@@ -32,7 +41,7 @@ namespace ChamealeonApp.Models.Helpers
             double protein = 0;
             double sodium = 0;
             double sugar = 0;
-            foreach (var nutrition in spoonacularMeal.Result.nutrition.nutrients)
+            foreach (var nutrition in spoonacularMeal.nutrition.nutrients)
             {
 
                 //need carbohydrates, fat, protein, calories, sodium and sugar
@@ -66,16 +75,27 @@ namespace ChamealeonApp.Models.Helpers
                 convertedMeal.NutritionInfo = convertedNutrition;
             }
 
+            //get image
+            convertedMeal.ImageUrl = spoonacularMeal.image;
+
+            //get cost
+            convertedMeal.Cost = spoonacularMeal.pricePerServing;
+
+            convertedMeal.Instructions = spoonacularMeal.instructions;
+            convertedMeal.Name = spoonacularMeal.title;
+            convertedMeal.SpoonacularMealId = spoonacularMeal.id;
+            convertedMeal.PrepTime = spoonacularMeal.readyInMinutes;
 
 
             return convertedMeal;
         }
 
         //function to create a meal plan out of the root response
-        public static MealPlan ConvertRootDTOToMealPlan(Root rootResponse)
+        public static async Task<MealPlan> ConvertRootDTOToMealPlanAsync(Root rootResponse, DataContext context)
         {
             //TODO: look into this for iterating through properties https://stackoverflow.com/questions/721441/c-sharp-how-to-iterate-through-classes-fields-and-set-properties
             MealPlan mealPlanObject = new MealPlan();
+            mealPlanObject.MealDays = new List<DaysMeal>();
 
             //each mealplan has a list of days
             //sunday
@@ -90,7 +110,13 @@ namespace ChamealeonApp.Models.Helpers
                 //TODO: call convert rootomeal
                 //1: call the full meal DTO and convert to a full meal
                 //var convertedMeal = ConvertToFullMeal(spoonacularId);
-                var convertedMeal = ConvertSpoonacularMealToFullMeal(meal.id);
+                var convertedMeal = await ConvertSpoonacularMealToFullMealAsync(meal.id, context);
+                //check if the meal exists already before adding it to the mealplan
+                // if (context.Meals.Find(convertedMeal.Id) != null)
+                // {
+                //     //meal already exists in db so dont need to add everything again
+                //     continue;
+                // }
 
                 //add to list of meals for sunday
                 convertedSundayMeals.Add(convertedMeal);
@@ -108,7 +134,7 @@ namespace ChamealeonApp.Models.Helpers
             foreach (var meal in mondayMeals.meals)
             {
                 //call convert rootomeal
-                var convertedMeal = ConvertSpoonacularMealToFullMeal(meal.id);
+                var convertedMeal = await ConvertSpoonacularMealToFullMealAsync(meal.id, context);
 
                 //add to list of meals for sunday
                 convertedMondayMeals.Add(convertedMeal);
@@ -129,7 +155,7 @@ namespace ChamealeonApp.Models.Helpers
             foreach (var meal in mondayMeals.meals)
             {
                 //call convert rootomeal
-                var convertedMeal = ConvertSpoonacularMealToFullMeal(meal.id);
+                var convertedMeal = await ConvertSpoonacularMealToFullMealAsync(meal.id, context);
 
                 //add to list of meals for sunday
                 convertedTuesdayMeals.Add(convertedMeal);
@@ -151,7 +177,7 @@ namespace ChamealeonApp.Models.Helpers
             foreach (var meal in wednesdayMeals.meals)
             {
                 //call convert rootomeal
-                var convertedMeal = ConvertSpoonacularMealToFullMeal(meal.id);
+                var convertedMeal = await ConvertSpoonacularMealToFullMealAsync(meal.id, context);
 
                 //add to list of meals for sunday
                 convertedWednesdayMeals.Add(convertedMeal);
@@ -175,7 +201,7 @@ namespace ChamealeonApp.Models.Helpers
             foreach (var meal in thursdayMeals.meals)
             {
                 //call convert rootomeal
-                var convertedMeal = ConvertSpoonacularMealToFullMeal(meal.id);
+                var convertedMeal = await ConvertSpoonacularMealToFullMealAsync(meal.id, context);
 
                 //add to list of meals for sunday
                 convertedThursdayMeals.Add(convertedMeal);
@@ -198,7 +224,7 @@ namespace ChamealeonApp.Models.Helpers
             foreach (var meal in fridayMeals.meals)
             {
                 //call convert rootomeal
-                var convertedMeal = ConvertSpoonacularMealToFullMeal(meal.id);
+                var convertedMeal = await ConvertSpoonacularMealToFullMealAsync(meal.id, context);
 
                 //add to list of meals for sunday
                 convertedFridayMeals.Add(convertedMeal);
@@ -223,7 +249,7 @@ namespace ChamealeonApp.Models.Helpers
             foreach (var meal in mondayMeals.meals)
             {
                 //call convert rootomeal
-                var convertedMeal = ConvertSpoonacularMealToFullMeal(meal.id);
+                var convertedMeal = await ConvertSpoonacularMealToFullMealAsync(meal.id, context);
 
                 //add to list of meals for sunday
                 convertedSaturdayMeals.Add(convertedMeal);

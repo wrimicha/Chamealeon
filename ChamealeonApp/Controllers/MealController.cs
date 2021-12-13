@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using ChamealeonApp.Models.Entities;
 using ChamealeonApp.Models.Helpers;
 using ChamealeonApp.Models.Persistence;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -29,10 +30,16 @@ namespace ChamealeonApp.Controllers
 
         //Amir
         //POST add new user meal to db
-        [HttpPost("{day}")]
+        [Authorize]
+        [HttpPost]
         public async Task<IActionResult> PostCustomMeal(int day, [FromBody] Meal meal)
 
         {
+            //TODO: this route only creates a meal, does not add it to meal plan.
+            //UpdateMealPlanWithUserMeal in MealPlanController does that
+
+            //TODO: append the meal to the logged in user's custom meal list
+
             //TODO error check
             var user = await _userManager.Users.Include(x => x.CurrentMealPlan).FirstOrDefaultAsync(x => x.NormalizedEmail.Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
             var dayMealToAppendTo = user.CurrentMealPlan.MealDays.SingleOrDefault(x => x.Day == (DayOfWeek)day);
@@ -43,10 +50,11 @@ namespace ChamealeonApp.Controllers
 
 
         //GET full details of a meal (screen, has instructions etc)
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetMealDetails(string id)
         {
-            return Ok(await _context.Meals.FirstOrDefaultAsync(x => x.Id == new Guid(id)));
+            return Ok(await _context.Meals.Include(m => m.Ingredients).Include(m => m.NutritionInfo).FirstOrDefaultAsync(x => x.Id == new Guid(id)));
         }
     }
 }
