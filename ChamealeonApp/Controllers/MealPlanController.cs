@@ -79,14 +79,7 @@ namespace ChamealeonApp.Controllers
 
 
 
-        // [HttpGet("test")]
-        // public async Task<IActionResult> Get()
-        // {
-        //     //TODO: Implement Realistic Implementation
-        //     var result = await SpoonacularAPIHelper.GenerateMealPlanFromSpoonacularAsync(null, new List<string> { "shellfish", "olives", "chicken", "cheese", "" }, 3000);
-
-        //     return Ok(result);
-        // }
+        
 
 
         //BURHAN

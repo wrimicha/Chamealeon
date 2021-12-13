@@ -17,8 +17,6 @@ namespace ChamealeonApp.Models.Persistence
         public DbSet<Meal> Meals { get; set; }
         public DbSet<MealPlan> MealPlans { get; set; }
         public DbSet<NutritionalInformation> NutrionalInformations { get; set; }
-        // public DbSet<User> Users { get; set; } //TODO: not need?
-        //public DbSet<DaysMeal> DaysMeals { get; set; }
 
         //Had an error with migrations: https://stackoverflow.com/questions/57745481/unable-to-create-an-object-of-type-mycontext-for-the-different-patterns-suppo
         public DataContext()
