@@ -36,10 +36,7 @@ namespace ChamealeonApp.Models.Helpers
 
             //meal does not exist in our db so convert the detailed meal into a full meal
 
-           
-
             //use select to map the nutrition to ingredients
-            //TODO: no cost avail and image is not the url, its a file name
             convertedMeal.Ingredients = spoonacularMeal.extendedIngredients.Select(i => new Ingredient { Name = i.nameClean, UnitOfMeasurement = i.measures.us.unitShort, Amount = i.measures.us.amount }).ToList();
             //map the nutrional information
             convertedMeal.NutritionInfo = new NutritionalInformation();
@@ -75,67 +72,13 @@ namespace ChamealeonApp.Models.Helpers
             //     throw new Exception("An error has occured creating a Meal from the Spoonacular meal");
             // }
         }
-        /*
-        public static void AddMealToDay(List<Entities.Meal> convertedMeals, List<DTOs.SpoonacularResonseDTOs.GenerateMealPlanDTOs.Meal> rootMeals)
-        {
-            //each mealplan has a list of days
-            //sunday
-            //var sundayMeals = rootResponse.week.sunday;
-
-            //each list of days has a list of meals
-
-            //TODO: each meal has nutrients and ingredients-> amir?
-            //List<Models.Entities.Meal> convertedSundayMeals = new List<Models.Entities.Meal>();
-            foreach (var meal in rootMeals.meals)
-            {
-                //TODO: call convert rootomeal
-                //1: call the full meal DTO and convert to a full meal
-                //var convertedMeal = ConvertToFullMeal(spoonacularId);
-                var convertedMeal = await ConvertSpoonacularMealToFullMealAsync(meal.id, context);
-                //check if the meal exists already before adding it to the mealplan
-                // if (context.Meals.Find(convertedMeal.Id) != null)
-                // {
-                //     //meal already exists in db so dont need to add everything again
-                //     continue;
-                // }
-
-                //add to list of meals for sunday
-                convertedSundayMeals.Add(convertedMeal);
-            }
-            //add the meal to the meal plan under sunday
-            mealPlanObject.MealDays.Add(new DaysMeal { Day = DayOfWeek.Sunday, Meals = convertedSundayMeals });
-        }
-        */
-
+        
         //Author: Burhan
         //Uses the FULL meal plan response from Spoonacular API and creates a MealPlan object out of it, uses ConvertSpoonacularMealToFullMealAsync to get and create each meal
         public static async Task<MealPlan> ConvertRootDTOToMealPlanAsync(Root rootResponse, DataContext context)
         {
             // try
             // {
-            //TODO: look into this for iterating through properties https://stackoverflow.com/questions/721441/c-sharp-how-to-iterate-through-classes-fields-and-set-properties
-            /*
-                        var days = rootResponse.week.GetType().GetProperties();
-                        foreach (var day in days)
-                        {
-                            var meals = day.GetType().GetProperties();
-                            Console.WriteLine(day.Name);
-                            Console.WriteLine(day.GetConstantValue());
-                            foreach (var meal in meals)
-                            {
-                                Console.WriteLine(meal.Name);
-                                Console.WriteLine(meal.GetConstantValue());
-
-                                DTOs.SpoonacularResonseDTOs.GenerateMealPlanDTOs.Meal rootMeal = (DTOs.SpoonacularResonseDTOs.GenerateMealPlanDTOs.Meal)meal.GetConstantValue();
-                                var convertedMeal = await ConvertSpoonacularMealToFullMealAsync(rootMeal.id, context);
-
-                                //TODO: add it to that day, how to tell?
-                            }
-
-                        }
-                        */
-
-
 
             //instantiate the meal plan object that will be fully created and returned
             MealPlan mealPlanObject = new MealPlan();
