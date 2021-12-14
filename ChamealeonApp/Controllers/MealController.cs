@@ -32,18 +32,15 @@ namespace ChamealeonApp.Controllers
         //POST add new user meal to db
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> PostCustomMeal(int day, [FromBody] Meal meal)
+        public async Task<IActionResult> PostCustomMeal([FromBody] Meal meal)
 
         {
-            //TODO: this route only creates a meal, does not add it to meal plan.
             //UpdateMealPlanWithUserMeal in MealPlanController does that
 
-            //TODO: append the meal to the logged in user's custom meal list
 
             //TODO error check
             var user = await _userManager.Users.Include(x => x.CurrentMealPlan).FirstOrDefaultAsync(x => x.NormalizedEmail.Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
-            var dayMealToAppendTo = user.CurrentMealPlan.MealDays.SingleOrDefault(x => x.Day == (DayOfWeek)day);
-            dayMealToAppendTo.Meals.Add(meal);
+            user.UserCreatedMeals.Add(meal);
             await _userManager.UpdateAsync(user);
             return Created("", null);
         }
