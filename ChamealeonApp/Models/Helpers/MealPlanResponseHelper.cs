@@ -19,58 +19,60 @@ namespace ChamealeonApp.Models.Helpers
         //Takes the Spoonacular Id of a meal, gets the response from Spoonacular API of the FULL meal details and creates a proper Meal object
         public static async Task<Entities.Meal> ConvertSpoonacularMealToFullMealAsync(int spoonacularId, DataContext context)
         {
-            try
+            // try
+            // {
+            //instantiate the converted meal object that will be persisted to db
+            var convertedMeal = new Entities.Meal();
+
+            //get the FULL meal details from spoonacular API using the mealplan spoonacular meal id
+            var spoonacularMeal = await SpoonacularAPIHelper.GetFullDetailsOfMeal(spoonacularId);
+
+            //check if the spoonacular meal exists already before adding to the db
+            if (context.Meals.Any(m => m.SpoonacularMealId.Equals(spoonacularMeal.id)))
             {
-                //instantiate the converted meal object that will be persisted to db
-                var convertedMeal = new Entities.Meal();
-
-                //get the FULL meal details from spoonacular API using the mealplan spoonacular meal id
-                var spoonacularMeal = await SpoonacularAPIHelper.GetFullDetailsOfMeal(spoonacularId);
-
-                //check if the spoonacular meal exists already before adding to the db
-                if (context.Meals.Any(m => m.SpoonacularMealId.Equals(spoonacularMeal.id)))
-                {
-                    //TODO: meals are duplicated even if they already exist. fix that
-
-                    //meal already exists in db so dont need to add everything again, return the existing meal from the db
-                    return context.Meals.FirstOrDefault(m => m.SpoonacularMealId.Equals(spoonacularId));
-                }
-
-                //meal does not exist in our db so convert the detailed meal into a full meal
-                convertedMeal.Ingredients = spoonacularMeal.extendedIngredients.Select(i => new Ingredient { Name = i.nameClean }).ToList();
-
-                //map the nutrional information
-                foreach (var nutrition in spoonacularMeal.nutrition.nutrients)
-                {
-                    //need carbohydrates, fat, protein, calories, sodium and sugar
-                    if (nutrition.name.Contains("Calories"))
-                        convertedMeal.NutritionInfo.Calories = nutrition.amount; //kcal
-                    else if (nutrition.name.Contains("Carbohydrates"))
-                        convertedMeal.NutritionInfo.Carbs = nutrition.amount; //g
-                    else if (nutrition.name.Contains("Sugar"))
-                        convertedMeal.NutritionInfo.Sugar = nutrition.amount; //g
-                    else if (nutrition.name.Contains("Sodium"))
-                        convertedMeal.NutritionInfo.Sodium = nutrition.amount; //mg
-                    else if (nutrition.name.Contains("Protein"))
-                        convertedMeal.NutritionInfo.Protein = nutrition.amount;  //g
-                    else if (nutrition.name.Contains("Fat"))
-                        convertedMeal.NutritionInfo.Fat = nutrition.amount; //g
-                }
-
-                //get image, cost, instructions, name, spoonacular id, prep time
-                convertedMeal.ImageUrl = spoonacularMeal.image;
-                convertedMeal.Cost = spoonacularMeal.pricePerServing;
-                convertedMeal.Instructions = spoonacularMeal.instructions;
-                convertedMeal.Name = spoonacularMeal.title;
-                convertedMeal.SpoonacularMealId = spoonacularMeal.id;
-                convertedMeal.PrepTime = spoonacularMeal.readyInMinutes;
-
-                return convertedMeal;
+                //meal already exists in db so dont need to add everything again, return the existing meal from the db
+                return context.Meals.FirstOrDefault(m => m.SpoonacularMealId.Equals(spoonacularId));
             }
-            catch (System.Exception)
+
+            //meal does not exist in our db so convert the detailed meal into a full meal
+
+            //TODO: check if the ingredient exists before creating a new ingredient
+            convertedMeal.Ingredients = spoonacularMeal.extendedIngredients.Select(i => new Ingredient { Name = i.nameClean }).ToList();
+
+            //instaniate the nutrition information
+            convertedMeal.NutritionInfo = new NutritionalInformation();
+            //map the nutrional information
+            foreach (var nutrition in spoonacularMeal.nutrition.nutrients)
             {
-                throw new Exception("An error has occured creating a Meal from the Spoonacular meal");
+                //need carbohydrates, fat, protein, calories, sodium and sugar
+                if (nutrition.name.Contains("Calories"))
+                    convertedMeal.NutritionInfo.Calories = nutrition.amount; //kcal
+                else if (nutrition.name.Contains("Carbohydrates"))
+                    convertedMeal.NutritionInfo.Carbs = nutrition.amount; //g
+                else if (nutrition.name.Contains("Sugar"))
+                    convertedMeal.NutritionInfo.Sugar = nutrition.amount; //g
+                else if (nutrition.name.Contains("Sodium"))
+                    convertedMeal.NutritionInfo.Sodium = nutrition.amount; //mg
+                else if (nutrition.name.Contains("Protein"))
+                    convertedMeal.NutritionInfo.Protein = nutrition.amount;  //g
+                else if (nutrition.name.Contains("Fat"))
+                    convertedMeal.NutritionInfo.Fat = nutrition.amount; //g
             }
+
+            //get image, cost, instructions, name, spoonacular id, prep time
+            convertedMeal.ImageUrl = spoonacularMeal.image;
+            convertedMeal.Cost = spoonacularMeal.pricePerServing;
+            convertedMeal.Instructions = spoonacularMeal.instructions;
+            convertedMeal.Name = spoonacularMeal.title;
+            convertedMeal.SpoonacularMealId = spoonacularMeal.id;
+            convertedMeal.PrepTime = spoonacularMeal.readyInMinutes;
+
+            return convertedMeal;
+            // }
+            // catch (System.Exception)
+            // {
+            //     throw new Exception("An error has occured creating a Meal from the Spoonacular meal");
+            // }
         }
         /*
         public static void AddMealToDay(List<Entities.Meal> convertedMeals, List<DTOs.SpoonacularResonseDTOs.GenerateMealPlanDTOs.Meal> rootMeals)
@@ -108,6 +110,8 @@ namespace ChamealeonApp.Models.Helpers
         //Uses the FULL meal plan response from Spoonacular API and creates a MealPlan object out of it, uses ConvertSpoonacularMealToFullMealAsync to get and create each meal
         public static async Task<MealPlan> ConvertRootDTOToMealPlanAsync(Root rootResponse, DataContext context)
         {
+            // try
+            // {
             //TODO: look into this for iterating through properties https://stackoverflow.com/questions/721441/c-sharp-how-to-iterate-through-classes-fields-and-set-properties
             /*
                         var days = rootResponse.week.GetType().GetProperties();
@@ -152,7 +156,8 @@ namespace ChamealeonApp.Models.Helpers
             //add the meal to the meal plan under sunday
             mealPlanObject.MealDays.Add(new DaysMeal { Day = DayOfWeek.Sunday, Meals = convertedSundayMeals });
 
-            //TODO: repeat for each of the other days, due to nature of DTO, must do this manually
+            //NOTE: Must repeat for each of the other days, due to nature of DTO, must do this manually
+            //if time was not an issue, i would investigate how to improve this repetition of code
 
             //MONDAY
             var mondayMeals = rootResponse.week.monday;
@@ -216,6 +221,13 @@ namespace ChamealeonApp.Models.Helpers
 
             //last step, return full converted meal plan
             return mealPlanObject;
+            //}
+            // catch (System.Exception)
+            // {
+
+            //     throw new Exception("An error has occured creating a Meal Plan from the Spoonacular meal plan");
+            // }
+
         }
     }
 }
