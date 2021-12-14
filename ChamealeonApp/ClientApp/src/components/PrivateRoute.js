@@ -1,19 +1,18 @@
 import { Route, Redirect } from 'react-router';
 
 
-const privateRoute = ({ component, ...rest }) => {
-    // get auth some how from identity core
-    let auth = true
+const PrivateRoute = ({ component: Component, ...rest }) => {
+    const isLogin = () => {
+
+    }
     return (
-        auth ?
-            <Route {...rest} component={component} />
-            :
-            <Redirect
-                to={{
-                    pathname: "/Login",
-                }} />
-    )
+        <Route {...rest} render={props => (
+            isLogin() ?
+                <Component {...props} />
+                : <Redirect to="/signin" />
+        )
+        } />
+    );
+};
 
-}
-
-export default privateRoute
+export default PrivateRoute
