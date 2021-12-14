@@ -1,7 +1,12 @@
-
+import  {Button} from "reactstrap"
+import axios from "axios"
 
 const Signup = () => {
-return (<h1>hello from Signup</h1>)
+    return (
+        <Button onClick={() => {
+            axios.post("http://localhost/api/user/signup",)
+        }}>Click me</Button>
+    )
 }
 
 export default Signup

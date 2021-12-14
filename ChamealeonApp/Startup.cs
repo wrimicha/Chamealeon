@@ -103,11 +103,11 @@ namespace ChamealeonApp
             app.UseStaticFiles();
             app.UseRouting();
             app.UseCors(options => options
-                .WithOrigins(new []{"http://localhost"})
+                .WithOrigins(new []{"http://localhost:5002"})
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials()
-            );
+            ); // https://www.youtube.com/watch?v=FSUa8Vd-td0 bless this man's soul
             app.UseAuthentication();
             app.UseAuthorization();
 
