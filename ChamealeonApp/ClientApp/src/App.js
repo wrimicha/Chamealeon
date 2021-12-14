@@ -9,6 +9,7 @@ import NutritionalInformation from './components/Views/NutritionalInformation';
 import ShoppingList from './components/ShoppingList/ShoppingList';
 import PublicRoute from './components/PublicRoute';
 import axios from 'axios';
+import Profile from './components/Views/Profile';
 
 const App = () => {
 
