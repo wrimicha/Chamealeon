@@ -10,15 +10,16 @@ import ShoppingList from './components/ShoppingList/ShoppingList';
 import PublicRoute from './components/PublicRoute';
 import axios from 'axios';
 import Profile from './components/Views/Profile';
+import CreateMealPlan from './components/Views/CreateMealPlan';
 
 const App = () => {
 
-  const [auth, setAuth] = useState(false)
+  const [auth, setAuth] = useState(true)
 
-  useEffect(() => {
-    axios.get("http://localhost:5000/api/user/validate", { withCredentials: true }).then(response => setAuth(true)).catch(err => setAuth(false))
-    console.log(auth)
-  })
+  // useEffect(() => {
+  //   axios.get("http://localhost:5000/api/user/validate", { withCredentials: true }).then(response => setAuth(true)).catch(err => setAuth(false))
+  //   console.log(auth)
+  // })
   const authHook = { auth: auth, setAuth: setAuth }
   return (
     <Layout>
@@ -27,6 +28,8 @@ const App = () => {
       <PublicRoute authHook={authHook} restricted={true} component={Signup} path="/Signup" exact />
       <PrivateRoute authHook={authHook} component={NutritionalInformation} path="/NutritionalInformation" exact />
       <PrivateRoute authHook={authHook} component={ShoppingList} path="/ShoppingList" exact />
+      <PrivateRoute authHook={authHook} component={Profile} path="/Profile" exact />
+      <PrivateRoute authHook={authHook} component={CreateMealPlan} path="/CreateMealPlan" exact />
     </Layout>
   );
 }

@@ -58,13 +58,13 @@ export default function Profile() {
             <Form.Group>
                 <Form.Label>Diet:</Form.Label>
                 <br></br>
-                <Form.Check checked inline label="Vegan" name="vegan" type='radio' id="vegan" />
-                <Form.Check inline label="Gluten Free" name="glutenfree" type='radio' id="glutenfree" />
-                <Form.Check inline label="Paleo" name="paleo" type='radio' id="paleo" />
-                <Form.Check inline label="Ketogenic" name="ketogenic" type='radio' id="ketogenic" />
-                <Form.Check inline label="Pescetarian" name="pescetarian" type='radio' id="pescetarian" />
-                <Form.Check inline label="Vegetarian" name="vegetarian" type='radio' id="vegetarian" />
-                <Form.Check inline label="Primal" name="primal" type='radio' id="primal" />
+                <Form.Check inline label="Vegan" name="diet" type='radio' id="vegan" />
+                <Form.Check inline label="Gluten Free" name="diet" type='radio' id="glutenfree" />
+                <Form.Check inline label="Paleo" name="diet" type='radio' id="paleo" />
+                <Form.Check inline label="Ketogenic" name="diet" type='radio' id="ketogenic" />
+                <Form.Check inline label="Pescetarian" name="diet" type='radio' id="pescetarian" />
+                <Form.Check inline label="Vegetarian" name="diet" type='radio' id="vegetarian" />
+                <Form.Check inline label="Primal" name="diet" type='radio' id="primal" />
 
             </Form.Group>
 

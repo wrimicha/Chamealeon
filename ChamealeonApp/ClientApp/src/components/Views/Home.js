@@ -1,10 +1,11 @@
 import React from 'react';
 import MealCard from '../MealCard/MealCard'
 import '../../styles/Home.css'
+import SwapMealModal from './SwapMealModal';
 
 
 const Home = () => {
-
+  
   return (
     <div>
       <div className="meal-container">
@@ -14,6 +15,9 @@ const Home = () => {
         <MealCard />
         <MealCard />
         <MealCard />
+        {/* <Modal>
+          <SwapMealModal />
+        </Modal> */}
       </div>
     </div>
   );
