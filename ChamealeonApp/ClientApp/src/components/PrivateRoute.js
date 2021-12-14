@@ -6,7 +6,7 @@ const privateRoute = ({ component, ...rest }) => {
     let auth = true
     return (
         auth ?
-            <Route {...rest} component={component}/>
+            <Route {...rest} component={component} />
             :
             <Redirect
                 to={{
