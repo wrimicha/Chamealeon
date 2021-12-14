@@ -72,6 +72,7 @@ namespace ChamealeonApp.Controllers
         //Author: Burhan
         //Update a specific meal in the weekly meal plan with a meal made by the user
 
+        
         [Authorize]
         [HttpPut("updateMealPlanWithUserMeal")]
 
@@ -110,45 +111,89 @@ namespace ChamealeonApp.Controllers
             }
         }
 
-        //Mike
-        //PUT update a specific meal in the 
-        //TODO: search for any meal in spoonacular, needs a helper method
-        // [Authorize]
-        // [HttpPut("updateMealPlanWithSpoonacularMeal")]
-        // public async Task<IActionResult> UpdateMealPlanWithSpoonacularMeal(string mealId, DayOfWeek day, int mealIndexInDay)
-        // {
+        // Mike
+        // PUT update a specific meal in the 
+        //TODO: Test with postman once we have GET route for the weekly meal plan
+        [Authorize]
+        [HttpPut("updateMealPlanWithSpoonacularMeal")]
+        public async Task<IActionResult> UpdateMealPlanWithSpoonacularMeal(int spoonacularId, DayOfWeek day, int mealIndexInDay)
+        {
 
-        //     //TODO: Gets the meal in the meal plan and recplaces it with the choosen meal
+            //TODO: Gets the meal in the meal plan and recplaces it with the choosen meal
 
+            //make sure it saves to the user
+            //get the logged in user 
+            var loggedInUser = await _userManager.Users
+                                                 .Include(u => u.CurrentMealPlan)
+                                                 .ThenInclude(m => m.MealDays)
+                                                 .ThenInclude(md => md.Meals)
+                                                 .FirstOrDefaultAsync(us => us.NormalizedEmail
+                                                 .Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
+  
+            //Use the helper function to create a meal object from the spoonacular meal id
+            var spoonacularMeal = MealPlanResponseHelper.ConvertSpoonacularMealToFullMealAsync(spoonacularId, _context);
 
-        //     //make sure it saves to the user
-        //     //get the logged in user 
-        //     var loggedInUser = await _userManager.Users.Include(u => u.CurrentMealPlan).ThenInclude(m => m.MealDays).ThenInclude(md => md.Meals).FirstOrDefaultAsync(us => us.NormalizedEmail
-        //     .Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
+            //assign the loggedin user the converted meal
+            loggedInUser.CurrentMealPlan.MealDays[(int)day].Meals[mealIndexInDay] = await spoonacularMeal;
 
-        //     //find the meal in the database that they want to replace with
-        //     //the spoonacular id should be empty if its a user defined meal
-        //     var mealInDb = _context.Meals.Where(m => string.IsNullOrEmpty(m.SpoonacularMealId.ToString()) == true)
-        //     .FirstOrDefaultAsync(userMeals => userMeals.Id.Equals(new Guid(mealId.Trim())));
+            await _context.SaveChangesAsync();
 
-        //     //replace the user meal with the new meal
-        //     //get the meal plan, get the day of the week, get the meal object in the list of meals for that day
-        //     loggedInUser.CurrentMealPlan.MealDays[(int)day].Meals[mealIndexInDay] = await mealInDb;
-
-        //     await _context.SaveChangesAsync();
-
-        //     //show the updated meal for that day
-        //     return Ok(loggedInUser.CurrentMealPlan.MealDays[(int)day].Meals.ToList());
-        // }
-
-
-
+            return Ok(loggedInUser.CurrentMealPlan.MealDays[(int)day].Meals.ToList());
+        }
 
         //Mike
         //GET meal plan (DB)
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> GetMealPlanFromDb()
+        {
 
+            //TODO: Add Error Checking
+
+            //get the user meals order by the day of the week
+            var loggedInUser = await _userManager.Users
+                                                 .Include(u => u.CurrentMealPlan)
+                                                 .ThenInclude(m => m.MealDays.OrderBy(md=>md.Day)) //.OrderBy(md=>md.Day) - Don't need this days already in order
+                                                 .ThenInclude(md => md.Meals)
+                                                 .ThenInclude(i => i.Ingredients)
+                                                 .FirstOrDefaultAsync(us => us.NormalizedEmail
+                                                 .Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
+
+            //get the user's meal plan
+            var mealPlan = loggedInUser.CurrentMealPlan;
+
+            return Ok(mealPlan);
+        }
 
         //Mike
         //DELETE a meal from the meal plan
+        [Authorize]
+        [HttpDelete("removeMealFromMealPlan")]
+        //user needs to pass int of enum of DaysOfWeek (ex 3 = wednesday)
+        public async Task<IActionResult> DeleteMealFromMealPlan(DayOfWeek day, int mealIndexInDay)
+        {
+
+            //TODO: Add Error Checking
+
+            //get the user meals order by the day of the week
+            var loggedInUser = await _userManager.Users
+                                                 .Include(u => u.CurrentMealPlan)
+                                                 .ThenInclude(m => m.MealDays)
+                                                 .ThenInclude(md => md.Meals)
+                                                 .FirstOrDefaultAsync(us => us.NormalizedEmail
+                                                 .Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
+
+            //find the meal in the mealplan
+            //var mealToDelete = loggedInUser.CurrentMealPlan.MealDays[(int)day].Meals[mealIndexInDay];
+            var mealToDelete = loggedInUser.CurrentMealPlan.MealDays.FirstOrDefault(md => (((int)md.Day).Equals((int)day))).Meals[mealIndexInDay];
+
+            //delete the meal
+            loggedInUser.CurrentMealPlan.MealDays[(int)day].Meals.Remove(mealToDelete);
+
+            //update the database        
+            await _context.SaveChangesAsync();
+
+            return Ok(mealToDelete);
+        }
     }
 }

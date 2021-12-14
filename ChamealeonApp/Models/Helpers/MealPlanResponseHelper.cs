@@ -36,12 +36,13 @@ namespace ChamealeonApp.Models.Helpers
 
             //meal does not exist in our db so convert the detailed meal into a full meal
 
-            //TODO: check if the ingredient exists before creating a new ingredient
-            convertedMeal.Ingredients = spoonacularMeal.extendedIngredients.Select(i => new Ingredient { Name = i.nameClean }).ToList();
+           
 
-            //instaniate the nutrition information
-            convertedMeal.NutritionInfo = new NutritionalInformation();
+            //use select to map the nutrition to ingredients
+            //TODO: no cost avail and image is not the url, its a file name
+            convertedMeal.Ingredients = spoonacularMeal.extendedIngredients.Select(i => new Ingredient { Name = i.nameClean, UnitOfMeasurement = i.measures.us.unitShort, Amount = i.measures.us.amount }).ToList();
             //map the nutrional information
+            convertedMeal.NutritionInfo = new NutritionalInformation();
             foreach (var nutrition in spoonacularMeal.nutrition.nutrients)
             {
                 //need carbohydrates, fat, protein, calories, sodium and sugar
