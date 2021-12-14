@@ -9,7 +9,6 @@ using ChamealeonApp.Models.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,7 +30,7 @@ namespace ChamealeonApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddCors();
             services.AddControllersWithViews();
             services.AddSwaggerGen(c =>
             {
@@ -101,9 +100,14 @@ namespace ChamealeonApp
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Round The Code");
             });
-            // app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseCors(options => options
+                .WithOrigins(new []{"http://localhost"})
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials()
+            );
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -115,6 +119,8 @@ namespace ChamealeonApp
 
                 endpoints.MapFallbackToFile("index.html");
             });
+
+
         }
     }
 }

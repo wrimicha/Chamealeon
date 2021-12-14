@@ -87,7 +87,7 @@ namespace ChamealeonApp.Controllers
             {
                 var token = _tokenService.CreateToken(user);
                 Response.Cookies.Append("jwt", token, new CookieOptions { HttpOnly = true });
-                return Ok("success");
+                return Ok("logged in bruh");
             }
 
             return Unauthorized("Not a good password");
