@@ -1,24 +1,52 @@
-import { Button } from "reactstrap"
+import { Button, Input, InputGroup, InputGroupText } from "reactstrap"
 import axios from "axios";
+import { HiFingerPrint, HiOutlineMail } from "react-icons/hi";
+import { useState } from "react";
 
 const Login = () => {
+    const [inputs, setInputs] = useState({
+        email: "",
+        password: "",
+    })
+    const handleLogin = (event) => {
+        axios.post("http://localhost:5000/api/User/Login",
+            {
+                email: inputs.email,
+                password: inputs.password,
+            }, { withCredentials: true })
+            .then(result => console.log(result))
+            .catch(err => console.log(err))
+    }
+
+    const handleInputChange = (event) => {
+        const value = event.target.value;
+        setInputs({
+            ...inputs,
+            [event.target.name]: value
+        });
+    }
     return (
         <div>
-            <p>email</p>
-            <input></input>
-            <p>pass</p>
-            <input></input>
-            <Button onClick={() => {
-                console.log("hi")
-                axios.post("http://localhost:5000/api/User/Login",
-                    {
-                        email: "a@b.c",
-                        password: "amirA123@@"
-                    }, 
-                    { withCredentials: true })
-                    .then(result => console.log(result))
-                    .catch(err => console.log(err))
-            }}>Click me</Button>
+            <InputGroup>
+                <InputGroupText>
+                    <HiOutlineMail />
+                </InputGroupText>
+                <Input name="email" value={inputs.email} onChange={handleInputChange} placeholder="email" />
+            </InputGroup>
+            <br />
+            <InputGroup>
+                <InputGroupText>
+                    <HiFingerPrint />
+                </InputGroupText>
+                <Input name="password" value={inputs.password} onChange={handleInputChange} placeholder="password" />
+            </InputGroup>
+            <Button
+                color="success"
+                outline
+                onClick={handleLogin}
+            >
+                Login
+            </Button>
         </div >
     )
 }
