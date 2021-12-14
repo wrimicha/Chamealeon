@@ -8,32 +8,32 @@ using ChamealeonApp.Models.Persistence;
 
 namespace ChamealeonApp.Models.Helpers
 {
+    //Author: Burhan
+    //Purpose of the class is to take the response from Spoonacular API and convert it to the appopriate type for our app
     public static class MealPlanResponseHelper
     {
-
+        //Takes the Spoonacular Id of a meal, gets the response from Spoonacular API of the FULL meal details and creates a proper Meal object
         public static async Task<Entities.Meal> ConvertSpoonacularMealToFullMealAsync(int spoonacularId, DataContext context)
         {
-            //create a meal object out of this meal and save to database
+            //instantiate the converted meal object that will be persisted to db
             var convertedMeal = new Entities.Meal();
 
-            //1. get the FULL meal details from spoonacular using the mealplan meal id
-            //check if the spoonacular meal exists already
+            //get the FULL meal details from spoonacular API using the mealplan spoonacular meal id
             var spoonacularMeal = await SpoonacularAPIHelper.GetFullDetailsOfMeal(spoonacularId);
+
+            //check if the spoonacular meal exists already before adding to the db
             if (context.Meals.Any(m => m.SpoonacularMealId.Equals(spoonacularMeal.id)))
             {
                 //TODO: meals are duplicated even if they already exist. fix that
-                //meal already exists in db so dont need to add everything again
+
+                //meal already exists in db so dont need to add everything again, return the existing meal from the db
                 return context.Meals.FirstOrDefault(m => m.SpoonacularMealId.Equals(spoonacularId));
             }
 
-            //2. convert the detailed meal into a full meal
+            //meal does not exist in our db so convert the detailed meal into a full meal
             List<Ingredient> ingredients = new List<Ingredient>();
-            // NutritionalInformation nutritionInfo = new NutritionalInformation();
-
-            //use select to map the nutrition to ingredients
-            //TODO: no cost avail and image is not the url, its a file name
-            ingredients = spoonacularMeal.extendedIngredients.Select(i => new Ingredient { Name = i.nameClean }).ToList();
-            convertedMeal.Ingredients = ingredients;
+            convertedMeal.Ingredients = spoonacularMeal.extendedIngredients.Select(i => new Ingredient { Name = i.nameClean }).ToList();
+             = ingredients;
             //map the nutrional information
             double cals = 0;
             double carbs = 0;

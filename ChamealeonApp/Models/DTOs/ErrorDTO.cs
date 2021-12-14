@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 namespace ChamealeonApp.Models.DTOs
 {
     //Author: Burhan
-    public class MealPlanQueryDTO
+    public class ErrorDTO
     {
-        public List<string> ItemsToExclude { get; set; }
-
+        public int Status { get; set; }
+        public string Title { get; set; }
+        public string Detail { get; set; }
     }
 }

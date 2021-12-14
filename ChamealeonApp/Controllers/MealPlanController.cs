@@ -17,104 +17,96 @@ using Microsoft.Extensions.Logging;
 
 namespace ChamealeonApp.Controllers
 {
+    //Authors: 
+    //TODO: Seperate the file into 2 controllers
+    //Burhan (Implemented generating the meal plan and getting a meal full details from the Spoonacular API, updating meal plan with a user created meal
+    //Mike
     [ApiController]
     [Route("api/[controller]")]
     public class MealPlanController : Controller
     {
-        //burhan
+
 
         private readonly DataContext _context;
         private readonly UserManager<User> _userManager;
-        // private readonly SignInManager<User> _signInManager;
-        // private readonly TokenService _tokenService;
 
-        public MealPlanController(DataContext context, UserManager<User> userManager
-            // SignInManager<User> signInManager,
-            // TokenService tokenService
-            )
+        public MealPlanController(DataContext context, UserManager<User> userManager)
         {
             _context = context;
             this._userManager = userManager;
-            // this._signInManager = signInManager;
-            // _tokenService = tokenService;
         }
 
-        //make weekly meal plan (calls helper API)
+        //Author: Burhan
+        //Generate a weekly meal plan (calls helper API)
         [Authorize]
         [HttpPost("generateMealPlan")]
         public async Task<IActionResult> GenereateMealPlan([FromBody] MealPlanQueryDTO mealPlanQuery)
         {
-            //make sure it saves to the user
-            //get the logged in user 
-            var loggedInUser = await _userManager.Users.Include(u => u.CurrentMealPlan).Include(u => u.PersonalNutritionalInformationGoal).FirstOrDefaultAsync(us => us.NormalizedEmail
-            .Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
+            try
+            {
+                //get the logged in user 
+                var loggedInUser = await _userManager.Users.Include(u => u.CurrentMealPlan).Include(u => u.PersonalNutritionalInformationGoal).FirstOrDefaultAsync(us => us.NormalizedEmail
+                .Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
 
-            //set the query to the users goals
+                //call helper to make a request to API
+                var retrievedRootResponse = await SpoonacularAPIHelper.GenerateMealPlanFromSpoonacularAsync(loggedInUser.Diet.Trim(), mealPlanQuery.ItemsToExclude, loggedInUser.PersonalNutritionalInformationGoal.Calories);
 
+                //take the API response and convert to a proper meal plan
+                var convertedMealPlan = await MealPlanResponseHelper.ConvertRootDTOToMealPlanAsync(retrievedRootResponse, _context);
 
-            //TODO: check the list of items to include for any user input errors
+                //add the meal plan to the db and to the user
+                loggedInUser.CurrentMealPlan = convertedMealPlan;
+                await _context.SaveChangesAsync();
 
-            //call helper to make a request to API and save to the database
-            var retrievedRootResponse = await SpoonacularAPIHelper.GenerateMealPlanFromSpoonacularAsync(loggedInUser.Diet.Trim(), mealPlanQuery.ItemsToExclude, loggedInUser.PersonalNutritionalInformationGoal.Calories); //TODO: error check if its not an integer
+                return Ok(convertedMealPlan);
+            }
+            catch (System.Exception)
+            {
 
-            var convertedMealPlan = await MealPlanResponseHelper.ConvertRootDTOToMealPlanAsync(retrievedRootResponse, _context);
+                return BadRequest(new ErrorDTO { Title = "An error has occured generating the meal plan." });
+            }
 
-            // _context.MealPlans.Add(convertedMealPlan);
-            // await _context.SaveChangesAsync();
-
-
-
-
-
-            //might need to include nutrition
-            // var userInDb = await _context.Users.Include(u => u.CurrentMealPlan).FirstOrDefaultAsync(u => u.Id.Equals(loggedInUser.Id));
-
-            loggedInUser.CurrentMealPlan = convertedMealPlan;
-            // await _context.MealPlans.AddAsync(convertedMealPlan); //not sure if needed
-            // userInDb.CurrentMealPlan.Id = convertedMealPlan.Id;
-            await _context.SaveChangesAsync();
-
-            return Ok(convertedMealPlan);
         }
 
 
-
-        // [HttpGet("test")]
-        // public async Task<IActionResult> Get()
-        // {
-        //     //TODO: Implement Realistic Implementation
-        //     var result = await SpoonacularAPIHelper.GenerateMealPlanFromSpoonacularAsync(null, new List<string> { "shellfish", "olives", "chicken", "cheese", "" }, 3000);
-
-        //     return Ok(result);
-        // }
-
-
-        //BURHAN
-        //PUT update a specific meal in the weekly meal plan FROM USER'S MEALS CREATED IN DB
-        //GET generate weekly meal plan (calls helper API)
+        //Author: Burhan
+        //Update a specific meal in the weekly meal plan with a meal made by the user
         [Authorize]
         [HttpPut("updateMealPlanWithUserMeal")]
 
-        public async Task<IActionResult> UpdateMealPlanWithUserMeal(string mealId, DayOfWeek day, int mealIndexInDay)
+        //day of week is an enum, 0=Sunday
+        //each day has a list of 3 meals, indices are 0,1 and 2
+        public async Task<IActionResult> UpdateMealPlanWithUserMeal(string mealId, DayOfWeek day = DayOfWeek.Sunday, int mealIndexInDay = 0)
         {
-            //make sure it saves to the user
-            //get the logged in user 
-            var loggedInUser = await _userManager.Users.Include(u => u.CurrentMealPlan).ThenInclude(m => m.MealDays).ThenInclude(md => md.Meals).FirstOrDefaultAsync(us => us.NormalizedEmail
-            .Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
+            try
+            {
+                if (mealIndexInDay > 2 || mealIndexInDay < 0)
+                {
+                    return BadRequest(new ErrorDTO { Title = "Invalid meal selected to update." });
+                }
 
-            //find the meal in the database that they want to replace with
-            //the spoonacular id should be empty if its a user defined meal
-            var mealInDb = _context.Meals.Where(m => string.IsNullOrEmpty(m.SpoonacularMealId.ToString()) == true)
-            .FirstOrDefaultAsync(userMeals => userMeals.Id.Equals(new Guid(mealId.Trim())));
+                //get the logged in user 
+                var loggedInUser = await _userManager.Users.Include(u => u.CurrentMealPlan).ThenInclude(m => m.MealDays).ThenInclude(md => md.Meals).FirstOrDefaultAsync(us => us.NormalizedEmail
+                .Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
 
-            //replace the user meal with the new meal
-            //get the meal plan, get the day of the week, get the meal object in the list of meals for that day
-            loggedInUser.CurrentMealPlan.MealDays[(int)day].Meals[mealIndexInDay] = await mealInDb;
+                //find the meal in the database that they want to replace with, the spoonacular id should be empty if its a user defined meal
+                var mealInDb = _context.Meals.Where(m => string.IsNullOrEmpty(m.SpoonacularMealId.ToString()) == true)
+                .FirstOrDefaultAsync(userMeals => userMeals.Id.Equals(new Guid(mealId.Trim())));
 
-            await _context.SaveChangesAsync();
+                //replace the user meal with the new meal by getting the meal plan, get the day of the week, get the meal object in the list of meals for that day
+                //because each enum value is also the index in the list, we can cast the enum to an int (ex. 0 = Sunday)
+                loggedInUser.CurrentMealPlan.MealDays[(int)day].Meals[mealIndexInDay] = await mealInDb;
 
-            //show the updated meal for that day
-            return Ok(loggedInUser.CurrentMealPlan.MealDays[(int)day].Meals.ToList());
+                await _context.SaveChangesAsync();
+
+                //show the updated meal for that day
+                return Ok(loggedInUser.CurrentMealPlan.MealDays[(int)day].Meals.ToList());
+            }
+            catch (System.Exception)
+            {
+
+                return BadRequest(new ErrorDTO { Title = "An error has occured updating the meal plan." });
+            }
         }
 
         //Mike
