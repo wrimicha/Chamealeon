@@ -135,5 +135,14 @@ namespace ChamealeonApp.Controllers
             //await _context.SaveChangesAsync();
             return Ok();
         }
+
+        //Amir
+        [Authorize]
+        [HttpGet("validate")]
+        public IActionResult Validate()
+        {
+            return Ok();
+        }
+
     }
 }
