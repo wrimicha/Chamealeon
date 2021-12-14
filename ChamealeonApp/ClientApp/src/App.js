@@ -5,19 +5,22 @@ import { Home } from './components/Home';
 import { FetchData } from './components/FetchData';
 import { Counter } from './components/Counter';
 import ShoppingList from './components/ShoppingList/ShoppingList';
+import PrivateRoute from './PrivateRoute';
+import NutritionalInformation from './components/Views/NutrtitionalInformation/NutritionalInformation';
 
 import './custom.css'
 
 export default class App extends Component {
   static displayName = App.name;
 
-  render () {
+  render() {
     return (
       <Layout>
-        <Route exact path='/' component={Home} />
+        {/* <PrivateRoute> <Home /> </PrivateRoute> */}
         <Route path='/counter' component={Counter} />
         <Route path='/fetch-data' component={FetchData} />
         <Route path='/shopping-list' component={ShoppingList} />
+        <Route path='/nutritionalinformation' component={NutritionalInformation} />
       </Layout>
     );
   }

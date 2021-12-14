@@ -1,0 +1,8 @@
+.flex-box{
+    display: flex;
+    flex-direction: row;
+}
+/* .row{
+    width: 25px;
+    height: 50px;
+} */

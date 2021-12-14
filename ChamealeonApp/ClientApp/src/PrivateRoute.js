@@ -1,7 +1,7 @@
+import { Route, Redirect } from 'react-router';
 
 
-
-const privateRoute = ({children, ...rest}) => {
+const privateRoute = ({ children, ...rest }) => {
     // get auth some how from identity core
     let auth
     return (

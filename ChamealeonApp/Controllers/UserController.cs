@@ -91,6 +91,17 @@ namespace ChamealeonApp.Controllers
 
         //update user details
         //burhan
+        //pages:
+        /*
+        update user page 
+        genereate meal plan
+        update a meal with user defined meal
+        
+        nutrition for the week
+        nutrition for the day
+        */
+
+
         [Authorize]
         [HttpPut("update")]
         public async Task<IActionResult> UpdateDetails([FromBody] UserInformationDTO userModel)
