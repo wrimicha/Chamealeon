@@ -66,23 +66,52 @@ namespace ChamealeonApp.Models.Helpers
 
          //Mike
          //TODO: make 3 overloads
-        public static async Task<SearchRoot> GetMealSuggestions(string diet, string mealType, string query)
+        public static async Task<SearchRoot> GetMealSuggestions(string query)
         {
-            var request = new RestRequest($"recipes/complexSearch").AddParameter("apiKey", "eaa80ce8fa5c4a2fa1a3c6c875ef9bf5").AddParameter("query", query).AddParameter("addRecipeNutrition", true);
-
-            if (diet != null)
-            {
-                request.AddParameter("diet", diet);
-            }
-            if (mealType != null)
-            {
-                request.AddParameter("type", mealType);
-            }
+            var request = new RestRequest($"recipes/complexSearch").AddParameter("number", 6).AddParameter("apiKey", "eaa80ce8fa5c4a2fa1a3c6c875ef9bf5").AddParameter("query", query).AddParameter("addRecipeNutrition", true);
 
             var response = await client.GetAsync<SearchRoot>(request);
             return response;
 
         }
+
+        // public static async Task<SearchRoot> GetMealSuggestions(string query, string mealType)
+        // {
+        //     var request = new RestRequest($"recipes/complexSearch").AddParameter("number", 6).AddParameter("apiKey", "eaa80ce8fa5c4a2fa1a3c6c875ef9bf5").AddParameter("query", query).AddParameter("addRecipeNutrition", true);
+
+        //     if (diet != null)
+        //     {
+        //         request.AddParameter("diet", diet);
+        //     }
+        //     if (mealType != null)
+        //     {
+        //         request.AddParameter("type", mealType);
+        //     }
+
+        //     var response = await client.GetAsync<SearchRoot>(request);
+        //     return response;
+
+        // }
+
+        // public static async Task<SearchRoot> GetMealSuggestions(string query, string mealType, string diet)
+        // {
+        //     var request = new RestRequest($"recipes/complexSearch").AddParameter("number", 6).AddParameter("apiKey", "eaa80ce8fa5c4a2fa1a3c6c875ef9bf5").AddParameter("query", query).AddParameter("addRecipeNutrition", true);
+
+        //     if (diet != null)
+        //     {
+        //         request.AddParameter("diet", diet);
+        //     }
+        //     if (mealType != null)
+        //     {
+        //         request.AddParameter("type", mealType);
+        //     }
+
+        //     var response = await client.GetAsync<SearchRoot>(request);
+        //     return response;
+
+        // }
+
+
 
     }
 }
