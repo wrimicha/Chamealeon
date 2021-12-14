@@ -11,12 +11,12 @@ export class Home extends Component {
       <div>
 
         <div className="meal-container">
-          <MealCard/>
-          <MealCard/>
-          <MealCard/>
-          <MealCard/>
-          <MealCard/>
-          <MealCard/>
+          <MealCard />
+          <MealCard />
+          <MealCard />
+          <MealCard />
+          <MealCard />
+          <MealCard />
         </div>
 
         {/* <h1>Hello, world!</h1>

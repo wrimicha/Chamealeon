@@ -1,6 +1,6 @@
 import React from 'react'
 import ShoppingListItem from '../ShoppingList/ShoppingListItem/ShoppingListItem'
-import './ShoppingList.css'
+import '../../styles/ShoppingList.css'
 import { BiPlus } from "react-icons/bi";
 
 
