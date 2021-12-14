@@ -8,6 +8,7 @@ import NutritionalInformation from './components/Views/NutritionalInformation';
 import Signup from './components/Views/Signup'
 import Login from './components/Views/Login'
 import './styles/custom.css'
+import CreateMealPlan from './components/Views/CreateMealPlan';
 
 export default class App extends Component {
   static displayName = App.name;
@@ -20,6 +21,7 @@ export default class App extends Component {
         <Route exact path='/Signup' component={Signup}></Route>
         <Route exact path='/shoppingList' component={ShoppingList} />
         <Route exact path='/nutritionalInformation' component={NutritionalInformation} />
+        <Route exact path='/generateMealPlan' component={CreateMealPlan} />
       </Layout>
     );
   }
