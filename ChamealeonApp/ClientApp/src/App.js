@@ -8,6 +8,7 @@ import './styles/custom.css'
 import NutritionalInformation from './components/Views/NutritionalInformation';
 import ShoppingList from './components/ShoppingList/ShoppingList';
 import PublicRoute from './components/PublicRoute';
+import Profile from './components/Views/Profile';
 
 export default class App extends Component {
   static displayName = App.name;
@@ -26,6 +27,8 @@ export default class App extends Component {
         <PublicRoute restricted={true} component={Signup} path="/Signup" exact />
         <PrivateRoute component={NutritionalInformation} path="/NutritionalInformation" exact />
         <PrivateRoute component={ShoppingList} path="/ShoppingList" exact />
+
+        <PublicRoute exact path='/profile' component={Profile} />
 
       </Layout>
     );
