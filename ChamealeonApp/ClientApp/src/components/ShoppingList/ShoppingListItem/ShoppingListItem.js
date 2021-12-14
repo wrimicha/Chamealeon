@@ -1,5 +1,5 @@
 import React from 'react'
-import './ShoppingListItem.css'
+import '../../../styles/ShoppingListItem.css'
 
 export default function ShoppingListItem(){
     return (

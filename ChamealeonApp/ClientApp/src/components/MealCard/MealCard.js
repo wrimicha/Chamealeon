@@ -1,5 +1,5 @@
 import React from 'react'
-import './MealCard.css'
+import '../../styles/MealCard.css'
 
 
 export default function MealCard(props) {
@@ -28,7 +28,7 @@ export default function MealCard(props) {
                         <p className="macro-title">Fat</p>
                         <p className="macro-value">800</p>
                     </div>
-                    
+
                 </div>
             </div>
         </div>

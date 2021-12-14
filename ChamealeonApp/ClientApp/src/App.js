@@ -18,8 +18,8 @@ export default class App extends Component {
         <PrivateRoute exact path='/' component={Home} />
         <Route exact path='/Login' component={Login}></Route>
         <Route exact path='/Signup' component={Signup}></Route>
-        <Route exact path='/shoppingList' component={ShoppingList} />
-        <Route exact path='/nutritionalInformation' component={NutritionalInformation} />
+        <Route exact path='/ShoppingList' component={ShoppingList} />
+        <Route exact path='/NutritionalInformation' component={NutritionalInformation} />
       </Layout>
     );
   }
