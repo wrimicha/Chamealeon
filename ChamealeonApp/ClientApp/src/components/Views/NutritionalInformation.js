@@ -5,7 +5,7 @@ import {
     BarElement, ArcElement, Tooltip, Legend
 } from 'chart.js';
 import { Pie, Bar } from 'react-chartjs-2';
-import './NutritionalInformation.css'
+import '../../styles/NutritionalInformation.css'
 import { DropdownButton, Dropdown } from 'react-bootstrap';
 
 // Reference: https://www.chartjs.org/docs/latest/charts/doughnut.html

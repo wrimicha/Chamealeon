@@ -11,6 +11,7 @@ using ChamealeonApp.Models.DTOs;
 using ChamealeonApp.Models.Entities;
 using ChamealeonApp.Models.Persistence;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -83,10 +84,11 @@ namespace ChamealeonApp.Controllers
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
             if (result.Succeeded)
-                return Ok(new UserDTO
-                {
-                    Token = _tokenService.CreateToken(user)
-                });
+            {
+                var token = _tokenService.CreateToken(user);
+                Response.Cookies.Append("jwt", token, new CookieOptions { HttpOnly = true });
+                return Ok("success");
+            }
 
             return Unauthorized("Not a good password");
         }

@@ -67,7 +67,7 @@ namespace ChamealeonApp
             .AddSignInManager<SignInManager<User>>();
 
             services.AddScoped<TokenService>();
-
+            // services.AddAuthentication(H)
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("This is my super duper key"));
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(opt =>

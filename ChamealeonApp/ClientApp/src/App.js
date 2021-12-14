@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router';
-import { Layout } from './components/Layout';
-import { Home } from './components/Home';
-import { FetchData } from './components/FetchData';
-import { Counter } from './components/Counter';
+import { Layout } from './components/Shared/Layout';
+import { Home } from './components/Views/Home';
 import ShoppingList from './components/ShoppingList/ShoppingList';
-import PrivateRoute from './PrivateRoute';
-import NutritionalInformation from './components/Views/NutrtitionalInformation/NutritionalInformation';
-
-import './custom.css'
+import PrivateRoute from './components/PrivateRoute';
+import NutritionalInformation from './components/Views/NutritionalInformation';
+import Signup from './components/Views/Signup'
+import Login from './components/Views/Login'
+import './styles/custom.css'
 
 export default class App extends Component {
   static displayName = App.name;
@@ -16,11 +15,11 @@ export default class App extends Component {
   render() {
     return (
       <Layout>
-        {/* <PrivateRoute> <Home /> </PrivateRoute> */}
-        <Route path='/counter' component={Counter} />
-        <Route path='/fetch-data' component={FetchData} />
-        <Route path='/shopping-list' component={ShoppingList} />
-        <Route path='/nutritionalinformation' component={NutritionalInformation} />
+        <PrivateRoute exact path='/' component={Home} />
+        <Route exact path='/Login' component={Login}></Route>
+        <Route exact path='/Signup' component={Signup}></Route>
+        <Route exact path='/shoppingList' component={ShoppingList} />
+        <Route exact path='/nutritionalInformation' component={NutritionalInformation} />
       </Layout>
     );
   }
