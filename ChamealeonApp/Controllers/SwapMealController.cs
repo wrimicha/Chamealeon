@@ -42,6 +42,7 @@ namespace ChamealeonApp.Controllers
             //list of user meals
             var userMeals = loggedInUser.UserCreatedMeals;
 
+            //TODO: take(4) or maybe randomize, pagination
             return Ok(userMeals);
         }
 

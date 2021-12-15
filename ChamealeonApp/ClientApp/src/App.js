@@ -11,6 +11,8 @@ import PublicRoute from './components/PublicRoute';
 import axios from 'axios';
 import Profile from './components/Views/Profile';
 import CreateMealPlan from './components/Views/CreateMealPlan';
+import SwapWithUserMeal from './components/Views/SwapWithUserMeals';
+import SwapWithSpoonacularMeals from './components/Views/SwapWithSpoonacularMeals';
 
 const App = () => {
 
@@ -30,6 +32,8 @@ const App = () => {
       <PrivateRoute authHook={authHook} component={ShoppingList} path="/ShoppingList" exact />
       <PrivateRoute authHook={authHook} component={Profile} path="/Profile" exact />
       <PrivateRoute authHook={authHook} component={CreateMealPlan} path="/CreateMealPlan" exact />
+      <PrivateRoute authHook={authHook} component={SwapWithUserMeal} path="/SwapWithUserMeals" exact />
+      <PrivateRoute authHook={authHook} component={SwapWithSpoonacularMeals} path="/SwapWithSpoonacularMeals" exact />
     </Layout>
   );
 }
