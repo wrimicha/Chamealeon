@@ -25,7 +25,7 @@ export default function MealCard({...rest}) {
                         <p className="macro-title">Fat</p>
                         <p className="macro-value">800</p>
                     </div>
-
+                    
                 </div>
             </div>
         </div>
