@@ -9,7 +9,6 @@ using ChamealeonApp.Models.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,7 +30,7 @@ namespace ChamealeonApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddCors();
             services.AddControllersWithViews();
             services.AddSwaggerGen(c =>
             {
@@ -67,7 +66,7 @@ namespace ChamealeonApp
             .AddSignInManager<SignInManager<User>>();
 
             services.AddScoped<TokenService>();
-
+            // services.AddAuthentication(H)
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("This is my super duper key"));
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(opt =>
@@ -101,9 +100,14 @@ namespace ChamealeonApp
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Round The Code");
             });
-            // app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseCors(options => options
+                .WithOrigins(new []{"http://localhost:5002"})
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials()
+            ); // https://www.youtube.com/watch?v=FSUa8Vd-td0 bless this man's soul
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -115,6 +119,8 @@ namespace ChamealeonApp
 
                 endpoints.MapFallbackToFile("index.html");
             });
+
+
         }
     }
 }

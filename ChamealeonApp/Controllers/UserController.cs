@@ -11,6 +11,7 @@ using ChamealeonApp.Models.DTOs;
 using ChamealeonApp.Models.Entities;
 using ChamealeonApp.Models.Persistence;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +19,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ChamealeonApp.Controllers
 {
+    //Authors: Amir and Burhan (Implemented update a user)
     [ApiController]
     [Route("api/[controller]")]
     public class UserController : Controller
@@ -45,6 +47,7 @@ namespace ChamealeonApp.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDTO registerDto)
         {
+            //TODO: check if inputs are valid, ex ints are ints
             var user = new User
             {
                 Email = registerDto.Email,
@@ -81,44 +84,42 @@ namespace ChamealeonApp.Controllers
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
             if (result.Succeeded)
-                return Ok(new UserDTO
-                {
-                    Token = _tokenService.CreateToken(user)
-                });
+            {
+                var token = _tokenService.CreateToken(user);
+                Response.Cookies.Append("jwt", token, new CookieOptions { HttpOnly = true });
+                return Ok("logged in bruh");
+            }
 
             return Unauthorized("Not a good password");
         }
 
-        //update user details
-        //burhan
+
+        //Author: Burhan
         [Authorize]
         [HttpPut("update")]
         public async Task<IActionResult> UpdateDetails([FromBody] UserInformationDTO userModel)
         {
-            //find the user
-            var user = await _userManager.Users.Include(u => u.PersonalNutritionalInformationGoal).FirstOrDefaultAsync(us => us.NormalizedEmail
-                .Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
+            try
+            {
+                //find the user
+                var user = await _userManager.Users.Include(u => u.PersonalNutritionalInformationGoal).FirstOrDefaultAsync(us => us.NormalizedEmail
+                    .Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
 
-            //Reference:
-            // TODO: find what properties need to be updated
-            user.Age = int.Equals(userModel.Age, null) ? user.Age : userModel.Age;
-            user.Diet = string.IsNullOrEmpty(userModel.Diet) ? user.Diet : userModel.Diet;
-            user.Weight = double.Equals(userModel.Weight, null) ? user.Weight : userModel.Weight;
-            user.Height = double.Equals(userModel.Height, null) ? user.Height : userModel.Height;
+                //only change properties if they have been changed by the user
+                user.Age = int.Equals(userModel.Age, null) ? user.Age : userModel.Age;
+                user.Diet = string.IsNullOrEmpty(userModel.Diet) ? user.Diet : userModel.Diet;
+                user.Weight = double.Equals(userModel.Weight, null) ? user.Weight : userModel.Weight;
+                user.Height = double.Equals(userModel.Height, null) ? user.Height : userModel.Height;
+                user.PersonalNutritionalInformationGoal.Calories = double.Equals(userModel.Calories, null) ? user.PersonalNutritionalInformationGoal.Calories : userModel.Calories;
 
-            user.PersonalNutritionalInformationGoal.Calories = double.Equals(userModel.Calories, null) ? user.PersonalNutritionalInformationGoal.Calories : userModel.Calories;
-            // user.PersonalNutritionalInformationGoal.Fat = double.Equals(userModel.Fat, null) ? user.PersonalNutritionalInformationGoal.Fat : userModel.Fat;
-            // user.PersonalNutritionalInformationGoal.Protein = double.Equals(userModel.Protein, null) ? user.PersonalNutritionalInformationGoal.Protein : userModel.Protein;
-            // user.PersonalNutritionalInformationGoal.Carbs = double.Equals(userModel.Carbs, null) ? user.PersonalNutritionalInformationGoal.Carbs : userModel.Carbs;
-            // user.PersonalNutritionalInformationGoal.Sodium = double.Equals(userModel.Sodium, null) ? user.PersonalNutritionalInformationGoal.Sodium : userModel.Sodium;
-            // user.PersonalNutritionalInformationGoal.Sugar = double.Equals(userModel.Sugar, null) ? user.PersonalNutritionalInformationGoal.Sugar : userModel.Sugar;
+                await _userManager.UpdateAsync(user);
+                return Ok();
+            }
+            catch (System.Exception)
+            {
 
-
-            await _userManager.UpdateAsync(user);
-
-            //TODO: not sure if it reflects the change
-            await _context.SaveChangesAsync();
-            return Created("", null);
+                return BadRequest(new ErrorDTO { Title = "An error has occured updating the user's details." });
+            }
         }
 
         //delete user
@@ -134,5 +135,14 @@ namespace ChamealeonApp.Controllers
             //await _context.SaveChangesAsync();
             return Ok();
         }
+
+        //Amir
+        [Authorize]
+        [HttpGet("validate")]
+        public IActionResult Validate()
+        {
+            return Ok();
+        }
+
     }
 }

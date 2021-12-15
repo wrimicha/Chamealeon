@@ -3,15 +3,14 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:48616",
-      "sslPort": 44313
+      "applicationUrl": "http://localhost:48616"
     }
   },
   "profiles": {
     "ChamealeonApp": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "https://localhost:5002",
+      "launchUrl": "http://localhost:5002",
       "applicationUrl": "http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
