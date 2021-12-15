@@ -2,15 +2,12 @@ import React from 'react'
 import '../../styles/MealCard.css'
 
 
-export default function MealCard(props) {
+export default function MealCard({...rest}) {
     return (
-        <div className="meal-card-group">
-            {/* <div className="meal-card-thumb" style={{ backgroundImage: "url(" + props.bg + ")" }}>
-            </div> */}
+        <div {...rest} className="meal-card-group">
             <div className="meal-card-thumb" style={{ backgroundImage: "url(https://www.pexels.com/photo/1640777/download/)" }}></div>
             <div className="meal-card-text">
                 <p className="card-title">Carrot & Rice with Bell Pepper</p>
-                {/* <a href="#">{props.name}</a> */}
                 <div className="macros-container">
                     <div className="macro-group">
                         <p className="macro-title">Calories</p>
