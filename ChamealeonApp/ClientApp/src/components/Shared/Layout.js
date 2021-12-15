@@ -2,18 +2,18 @@ import React, { Component } from 'react';
 import { Container } from 'reactstrap';
 import { NavMenu } from './NavMenu';
 
-export class Layout extends Component {
-  static displayName = Layout.name;
+export const Layout = ({ authHook, children, ...rest }) => {
 
-  render() {
-    return (
-      <div>
-        <NavMenu />
-        <Container>
-          {this.props.children}
-        </Container>
+  return (
+    <div>
+      <NavMenu authHook={authHook}/>
+      <Container>
+        {children}
+      </Container>
 
-      </div>
-    );
-  }
+    </div>
+  )
 }
+
+export default Layout
+

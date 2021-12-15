@@ -1,10 +1,11 @@
 import React, { Fragment } from 'react';
-import { Collapse, Container, Navbar, NavbarBrand, NavItem, NavLink } from 'reactstrap';
+import { Button, Collapse, Container, Navbar, NavbarBrand, NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import '../../styles/NavMenu.css';
 
-export const NavMenu = () => {
-  const navItems = localStorage.getItem("jwt") == null ? (
+export const NavMenu = ({ authHook }) => {
+  const [auth, setAuth] = authHook
+  const navItems = !auth ? (
     <Fragment>
       <NavItem>
         <NavLink tag={Link} className="text-dark" to="/Login">Login</NavLink>
@@ -30,6 +31,14 @@ export const NavMenu = () => {
       </NavItem>
       <NavItem>
         <NavLink tag={Link} className="text-dark" to="/CreateMealPlan">Create Plan</NavLink>
+      </NavItem>
+      <NavItem>
+        <Button color="danger" onClick={()=> {
+          localStorage.removeItem("jwt")
+          setAuth(false)
+        }}>
+          Logout
+        </Button>
       </NavItem>
     </Fragment>
   );

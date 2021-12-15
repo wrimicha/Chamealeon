@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Layout } from './components/Shared/Layout';
+import { Layout } from "./components/Shared/Layout"
 import Home from './components/Views/Home';
 import PrivateRoute from './components/PrivateRoute';
 import Signup from './components/Views/Signup'
@@ -16,11 +16,10 @@ import SwapWithSpoonacularMeals from './components/Views/SwapWithSpoonacularMeal
 
 const App = () => {
 
-  const [auth, setAuth] = useState(localStorage.getItem("jwt") != null)
+  const authHook = useState(localStorage.getItem("jwt") != null)
 
-  const authHook = { auth: auth, setAuth: setAuth }
   return (
-    <Layout>
+    <Layout authHook={authHook}>
       <PublicRoute authHook={authHook} restricted={true} component={Login} path={["/Login", "/"]} exact />
       <PrivateRoute authHook={authHook} component={Home} path="/Home" exact />
       <PublicRoute authHook={authHook} restricted={true} component={Signup} path="/Signup" exact />

@@ -1,7 +1,5 @@
 
 using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
 using System.Text;
 using ChamealeonApp.Models.Authentication;
 using ChamealeonApp.Models.Entities;
