@@ -86,8 +86,7 @@ namespace ChamealeonApp.Controllers
             if (result.Succeeded)
             {
                 var token = _tokenService.CreateToken(user);
-                Response.Cookies.Append("jwt", token, new CookieOptions { HttpOnly = true });
-                return Ok("logged in bruh");
+                return Ok(token);
             }
 
             return Unauthorized("Not a good password");
@@ -117,7 +116,6 @@ namespace ChamealeonApp.Controllers
             }
             catch (System.Exception)
             {
-
                 return BadRequest(new ErrorDTO { Title = "An error has occured updating the user's details." });
             }
         }

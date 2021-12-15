@@ -16,12 +16,8 @@ import SwapWithSpoonacularMeals from './components/Views/SwapWithSpoonacularMeal
 
 const App = () => {
 
-  const [auth, setAuth] = useState(true)
+  const [auth, setAuth] = useState(localStorage.getItem("jwt") != null)
 
-  // useEffect(() => {
-  //   axios.get("http://localhost:5000/api/user/validate", { withCredentials: true }).then(response => setAuth(true)).catch(err => setAuth(false))
-  //   console.log(auth)
-  // })
   const authHook = { auth: auth, setAuth: setAuth }
   return (
     <Layout>
