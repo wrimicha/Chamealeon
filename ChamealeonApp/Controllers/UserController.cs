@@ -149,7 +149,9 @@ namespace ChamealeonApp.Controllers
             var user = await _userManager.Users.Include(u => u.PersonalNutritionalInformationGoal).FirstOrDefaultAsync(us => us.NormalizedEmail
                     .Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
 
-            return Ok(new {
+            return Ok(new
+            {
+                Name = user.UserName,
                 Diet = user.Diet,
                 Height = user.Height,
                 Weight = user.Weight,
