@@ -1,8 +1,42 @@
-import React from 'react';
-import { Form, Button, Row } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Form, Button, Row, ListGroupItem, ListGroup } from 'react-bootstrap';
+import axios from 'axios';
 //R: https://react-bootstrap.github.io/components/forms/#forms-range
 export default function CreateMealPlan() {
-    var restrictions = ["tomato", "olives"];
+    const token = localStorage.getItem("jwt");
+    const config = {
+        headers: { Authorization: `Bearer ${token}` }
+    };
+
+
+    let [restrictions, setRestrictions] = useState([]);
+    let [textInputState, setTextInputState] = useState(null);
+
+    function handleInputChange(e) {
+        setTextInputState(e.target.value);
+    }
+
+    function addRestriction(newItem) {
+        setRestrictions((prevState) => {
+            const newRestrictions = [...prevState]
+
+            newRestrictions.push(newItem);
+            return newRestrictions;
+        });
+    }
+
+    function makeCallToGenerateMealPlan() {
+        const body = {
+            "itemsToExclude": restrictions
+        };
+        //Reference; https://stackabuse.com/making-asynchronous-http-requests-in-javascript-with-axios/
+        axios.post('http://localhost:5000/api/mealPlan/generateMealPlan/', body, config)
+            .then(resp => alert(resp.statusText))
+            .catch(err => {
+                alert("No meal plan was created")
+                console.error(err);
+            });
+    }
 
     return (
 
@@ -12,30 +46,10 @@ export default function CreateMealPlan() {
             <div>
                 <Form>
                     <Form.Group>
-                        <Form.Label>Enter daily maximum calorie limit</Form.Label>
-                        <Form.Control type="number" placeholder="Enter calorie limit" />
-
-                    </Form.Group>
-
-                    <Form.Group>
-                        <Form.Label>Select a diet</Form.Label>
-                        <br></br>
-                        <Form.Check inline label="Vegan" name="diet" type='radio' id="vegan" />
-                        <Form.Check inline label="Gluten Free" name="diet" type='radio' id="glutenfree" />
-                        <Form.Check inline label="Paleo" name="diet" type='radio' id="paleo" />
-                        <Form.Check inline label="Ketogenic" name="diet" type='radio' id="ketogenic" />
-                        <Form.Check inline label="Pescetarian" name="diet" type='radio' id="pescetarian" />
-                        <Form.Check inline label="Vegetarian" name="diet" type='radio' id="vegetarian" />
-                        <Form.Check inline label="Primal" name="diet" type='radio' id="primal" />
-
-                    </Form.Group>
-
-                    <Form.Group>
                         <Row className='align-items-center'>
-                            <Form.Label>Add any ingredient restrictions</Form.Label>
-                            <Form.Control type="text" placeholder="Ingredient restriction" />
-
-                            <Button variant="primary" type="submit">
+                            <Form.Label>Add any ingredient restrictions:</Form.Label>
+                            <Form.Control type="text" placeholder="Ingredient restriction" onChange={handleInputChange} />
+                            <Button variant="primary" onClick={() => addRestriction(textInputState)}>
                                 Add
                             </Button>
                         </Row>
@@ -45,20 +59,18 @@ export default function CreateMealPlan() {
                             Your plan will not include any:
                         </Form.Text>
                         <br></br>
-
-
-
-
-                        {restrictions.map(food =>
-                            <Form.Text className="text-muted" Text={food}>
-                                {food}
-                                <br></br>
-                            </Form.Text>
-                        )}
-
                     </Form.Group>
 
-                    <Button variant="primary" type="submit">
+                    <ListGroup>
+                        {restrictions.map(food =>
+                            <ListGroupItem className="text-muted" Text={food}>
+                                {food}
+                                <br></br>
+                            </ListGroupItem>
+                        )}
+                    </ListGroup>
+
+                    <Button variant="primary" onClick={makeCallToGenerateMealPlan}>
                         Generate meal plan
                     </Button>
 
