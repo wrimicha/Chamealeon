@@ -126,12 +126,19 @@ namespace ChamealeonApp.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            await _userManager.DeleteAsync(await _userManager.FindByIdAsync(id));
+            try
+            {
+                await _userManager.DeleteAsync(await _userManager.FindByIdAsync(id));
 
-            //TODO: delete associated meal plan
+                //TODO: delete associated meal plan
 
-            //await _context.SaveChangesAsync();
-            return Ok();
+                //await _context.SaveChangesAsync();
+                return Ok();
+            }
+            catch (System.Exception)
+            {
+                return BadRequest(new ErrorDTO { Title = "Something went wrong." });
+            }
         }
 
         //Amir
@@ -146,7 +153,8 @@ namespace ChamealeonApp.Controllers
         [HttpGet("userDetails")]
         public async Task<IActionResult> GetUserDetailsAsyncAsync()
         {
-            var user = await _userManager.Users.Include(u => u.PersonalNutritionalInformationGoal).FirstOrDefaultAsync(us => us.NormalizedEmail
+            try {
+                var user = await _userManager.Users.Include(u => u.PersonalNutritionalInformationGoal).FirstOrDefaultAsync(us => us.NormalizedEmail
                     .Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
 
             return Ok(new
@@ -158,6 +166,11 @@ namespace ChamealeonApp.Controllers
                 Calories = user.PersonalNutritionalInformationGoal.Calories,
                 Age = user.Age
             });
+            }
+            catch (System.Exception)
+            {
+                return BadRequest(new ErrorDTO { Title = "Something went wrong." });
+            }
         }
 
     }
