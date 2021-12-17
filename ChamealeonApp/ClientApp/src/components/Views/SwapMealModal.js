@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Modal, Button, Form, Alert } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import MealCard from '../MealCard/MealCard'
+import MealCardPopup from '../MealCard/MealCardPopup'
+import '../../styles/MealCard.css'
 
 const SwapMealModal = ({ modalShow, setShow }) => {
   //const [show, setShow] = useState(true);
@@ -39,21 +40,22 @@ const SwapMealModal = ({ modalShow, setShow }) => {
   return (
     <>
       <Modal
-        className="mainModal"
+        // style={{width: '100%!important'}}
+        dialogClassName="my-modal"
         centered
-        size="lg"
         dialogClassName="mainModal"
         show={modalShow}
         onHide={() => setShow(false)}
       >
         <div className="formMain">
-          <div className="meal-container">
-            <MealCard/>
-            <MealCard/>
-            <MealCard/>
-            <MealCard/>
-            <MealCard/>
-            <MealCard/>
+        <div style={{ display: 'flex', flexWrap: "wrap", width: '100%'}}>
+            <MealCardPopup/>
+            <MealCardPopup/>
+            <MealCardPopup/>
+            <MealCardPopup/>
+            <MealCardPopup/>
+            <MealCardPopup/>
+            
           </div>
         </div>
       </Modal>
