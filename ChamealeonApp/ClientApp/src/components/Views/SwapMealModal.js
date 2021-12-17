@@ -3,7 +3,6 @@ import { Modal, Button, Form, Alert } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import MealCard from '../MealCard/MealCard'
 
-
 const SwapMealModal = ({ modalShow, setShow }) => {
   //const [show, setShow] = useState(true);
   const [error, setError] = useState("");

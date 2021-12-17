@@ -3,7 +3,8 @@ import axios from "axios";
 import { HiFingerPrint, HiOutlineMail } from "react-icons/hi";
 import { useState } from "react";
 
-const Login = () => {
+const Login = ({ authHook }) => {
+    const [auth, setAuth] = authHook
     const [inputs, setInputs] = useState({
         email: "",
         password: "",
@@ -14,7 +15,11 @@ const Login = () => {
                 email: inputs.email,
                 password: inputs.password,
             }, { withCredentials: true })
-            .then(result => console.log(result))
+            .then(result => {
+                localStorage.setItem("jwt", result.data)
+                setAuth(true)
+                console.log(auth)
+            })
             .catch(err => console.log(err))
     }
 

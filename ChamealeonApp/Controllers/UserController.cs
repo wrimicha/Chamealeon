@@ -86,8 +86,7 @@ namespace ChamealeonApp.Controllers
             if (result.Succeeded)
             {
                 var token = _tokenService.CreateToken(user);
-                Response.Cookies.Append("jwt", token, new CookieOptions { HttpOnly = true });
-                return Ok("logged in bruh");
+                return Ok(token);
             }
 
             return Unauthorized("Not a good password");
@@ -117,7 +116,6 @@ namespace ChamealeonApp.Controllers
             }
             catch (System.Exception)
             {
-
                 return BadRequest(new ErrorDTO { Title = "An error has occured updating the user's details." });
             }
         }
@@ -153,6 +151,24 @@ namespace ChamealeonApp.Controllers
         public IActionResult Validate()
         {
             return Ok();
+        }
+
+        [Authorize]
+        [HttpGet("userDetails")]
+        public async Task<IActionResult> GetUserDetailsAsyncAsync()
+        {
+            var user = await _userManager.Users.Include(u => u.PersonalNutritionalInformationGoal).FirstOrDefaultAsync(us => us.NormalizedEmail
+                    .Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
+
+            return Ok(new
+            {
+                Name = user.UserName,
+                Diet = user.Diet,
+                Height = user.Height,
+                Weight = user.Weight,
+                Calories = user.PersonalNutritionalInformationGoal.Calories,
+                Age = user.Age
+            });
         }
 
     }

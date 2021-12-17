@@ -39,7 +39,9 @@ namespace ChamealeonApp.Controllers
 
 
             //TODO error check
-            var user = await _userManager.Users.Include(x => x.CurrentMealPlan).FirstOrDefaultAsync(x => x.NormalizedEmail.Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
+
+            var user = await _userManager.Users.Include(x => x.UserCreatedMeals).ThenInclude(m => m.Ingredients).FirstOrDefaultAsync(x => x.NormalizedEmail.Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
+            meal.Ingredients = meal.Ingredients;
             user.UserCreatedMeals.Add(meal);
             await _userManager.UpdateAsync(user);
             return Created("", null);

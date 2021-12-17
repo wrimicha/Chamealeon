@@ -74,11 +74,11 @@ namespace ChamealeonApp.Controllers
 
 
         [Authorize]
-        [HttpPut("updateMealPlanWithUserMeal")]
+        [HttpPut("updateMealPlanWithUserMeal/{id}")]
 
         //day of week is an enum, 0=Sunday
         //each day has a list of 3 meals, indices are 0,1 and 2
-        public async Task<IActionResult> UpdateMealPlanWithUserMeal(string mealId, DayOfWeek day = DayOfWeek.Sunday, int mealIndexInDay = 0)
+        public async Task<IActionResult> UpdateMealPlanWithUserMeal(string id, DayOfWeek day = DayOfWeek.Sunday, int mealIndexInDay = 0)
         {
             // try
             // {
@@ -92,17 +92,15 @@ namespace ChamealeonApp.Controllers
             .Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
 
             //find the meal in the database that they want to replace with, the spoonacular id should be empty if its a user defined meal
-            var mealInDb = _context.Meals.Where(m => string.IsNullOrEmpty(m.SpoonacularMealId.ToString()) == true)
-            .FirstOrDefaultAsync(userMeals => userMeals.Id.Equals(new Guid(mealId.Trim())));
+            var mealInDb = await _context.Meals.Where(m => m.SpoonacularMealId == 0).FirstOrDefaultAsync(userMeals => userMeals.Id.Equals(new Guid(id.Trim())));
 
             //replace the user meal with the new meal by getting the meal plan, get the day of the week, get the meal object in the list of meals for that day
-            //because each enum value is also the index in the list, we can cast the enum to an int (ex. 0 = Sunday)
-            loggedInUser.CurrentMealPlan.MealDays[(int)day].Meals[mealIndexInDay] = await mealInDb;
+            loggedInUser.CurrentMealPlan.MealDays.FirstOrDefault(m => m.Day == day).Meals[mealIndexInDay] = mealInDb;
 
-            await _context.SaveChangesAsync();
+            await _userManager.UpdateAsync(loggedInUser);
 
             //show the updated meal for that day
-            return Ok(loggedInUser.CurrentMealPlan.MealDays[(int)day].Meals.ToList());
+            return Ok(loggedInUser.CurrentMealPlan.MealDays.FirstOrDefault(m => m.Day == day).Meals.ToList());
             // }
             // catch (System.Exception)
             // {

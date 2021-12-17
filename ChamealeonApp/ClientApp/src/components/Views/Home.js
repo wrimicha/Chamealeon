@@ -3,6 +3,7 @@ import { Button } from "react-bootstrap";
 import MealCard from '../MealCard/MealCard'
 import '../../styles/Home.css'
 import SwapMealModal from './SwapMealModal';
+
 import SwapModal from "../Views/SwapMealModal";
 
 const Home = () => {
@@ -21,6 +22,7 @@ const Home = () => {
       {/* <div show={false}>HELLO</div> */}
 
       <div className="meal-container">
+
         <MealCard 
         modalShow={modalShow}
         setShow={setModalShow} />
