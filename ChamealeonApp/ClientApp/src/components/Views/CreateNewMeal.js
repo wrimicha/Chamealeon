@@ -61,28 +61,28 @@ const CreateNewMeal = () => {
                 <InputGroupText>
                     <FaUtensilSpoon />
                 </InputGroupText>
-                <Input name="Ingredients" value={inputs.ingredients} onChange={handleInputChange} placeholder="ingredients" />
+                <Input name="ingredients" value={inputs.ingredients} onChange={handleInputChange} placeholder="ingredients" />
             </InputGroup>
             <br />
             <InputGroup>
                 <InputGroupText>
                     <MdPriceChange />
                 </InputGroupText>
-                <Input name="Cost" value={inputs.cost} onChange={handleInputChange} placeholder="cost" />
+                <Input name="cost" value={inputs.cost} onChange={handleInputChange} placeholder="cost" />
             </InputGroup>
             <br />
             <InputGroup>
                 <InputGroupText>
                     <BiTimer />
                 </InputGroupText>
-                <Input name="PrepTime" value={inputs.prepTime} onChange={handleInputChange} placeholder="prep time" />
+                <Input name="prepTime" value={inputs.prepTime} onChange={handleInputChange} placeholder="prep time" />
             </InputGroup>
             <br />
             <InputGroup>
                 <InputGroupText>
                     <MdOutlineIntegrationInstructions />
                 </InputGroupText>
-                <Input name="Instructions" value={inputs.instructions} onChange={handleInputChange} placeholder="instruction" />
+                <Input name="instructions" value={inputs.instructions} onChange={handleInputChange} placeholder="instruction" />
             </InputGroup>
             <br />
             <InputGroup>
@@ -96,35 +96,35 @@ const CreateNewMeal = () => {
                 <InputGroupText>
                     <GiFoodTruck />
                 </InputGroupText>
-                <Input name="Calories" value={inputs.calories} onChange={handleInputChange} placeholder="calories" />
+                <Input name="calories" value={inputs.calories} onChange={handleInputChange} placeholder="calories" />
             </InputGroup>
             <br />
             <InputGroup>
                 <InputGroupText>
                     <FaHamburger />
                 </InputGroupText>
-                <Input name="Fat" value={inputs.fat} onChange={handleInputChange} placeholder="fat" />
+                <Input name="fat" value={inputs.fat} onChange={handleInputChange} placeholder="fat" />
             </InputGroup>
             <br />
             <InputGroup>
                 <InputGroupText>
                     <GiMeat />
                 </InputGroupText>
-                <Input name="Protein" value={inputs.protein} onChange={handleInputChange} placeholder="protein" />
+                <Input name="protein" value={inputs.protein} onChange={handleInputChange} placeholder="protein" />
             </InputGroup>
             <br />
             <InputGroup>
                 <InputGroupText>
                     <GiSlicedBread />
                 </InputGroupText>
-                <Input name="Carbs" value={inputs.carbs} onChange={handleInputChange} placeholder="carbs" />
+                <Input name="carbs" value={inputs.carbs} onChange={handleInputChange} placeholder="carbs" />
             </InputGroup>
             <br />
             <InputGroup>
                 <InputGroupText>
                     <GiSaltShaker />
                 </InputGroupText>
-                <Input name="Sodium" value={inputs.sodium} onChange={handleInputChange} placeholder="sodium" />
+                <Input name="sodium" value={inputs.sodium} onChange={handleInputChange} placeholder="sodium" />
             </InputGroup>
             <br />
             <InputGroup>
