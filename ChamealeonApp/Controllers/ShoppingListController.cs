@@ -11,6 +11,7 @@ using ChamealeonApp.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using ChamealeonApp.Models.Persistence;
 using ChamealeonApp.Models.Authentication;
+using ChamealeonApp.Models.DTOs;
 
 namespace ChamealeonApp.Controllers
 {
@@ -35,25 +36,34 @@ namespace ChamealeonApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var loggedInUser = await _userManager.Users
-                                        .Include(x => x.CurrentMealPlan)
-                                        .ThenInclude(x => x.MealDays)
-                                        .ThenInclude(x => x.Meals)
-                                        .ThenInclude(x => x.Ingredients)
-                                        .FirstOrDefaultAsync(x => x.NormalizedEmail.Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
+            try{
+                var loggedInUser = await _userManager.Users
+                                            .Include(x => x.CurrentMealPlan)
+                                            .ThenInclude(x => x.MealDays)
+                                            .ThenInclude(x => x.Meals)
+                                            .ThenInclude(x => x.Ingredients)
+                                            .FirstOrDefaultAsync(x => x.NormalizedEmail.Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
 
-            var mealDays = loggedInUser.CurrentMealPlan.MealDays;
+                var mealDays = loggedInUser.CurrentMealPlan.MealDays;
+                if(mealDays == null){
+                    return NotFound("No meals were found in the database");
+                }
 
-            var ingredientsList = new List<Ingredient>();
+                var ingredientsList = new List<Ingredient>();
 
-            //for each of the user's meals in the meal plan, go through each day, then each meal in each day and add those ingredients to the shoppoing list
-            for(int i = 0; i < mealDays.Count(); i++)
-                for(int j = 0; j < mealDays[i].Meals.Count(); j++)
-                    ingredientsList.AddRange(mealDays[i].Meals[j].Ingredients);
-            
-            var groupedIngredients = ingredientsList.GroupBy(x => x.Name);
+                //for each of the user's meals in the meal plan, go through each day, then each meal in each day and add those ingredients to the shoppoing list
+                for(int i = 0; i < mealDays.Count(); i++)
+                    for(int j = 0; j < mealDays[i].Meals.Count(); j++)
+                        ingredientsList.AddRange(mealDays[i].Meals[j].Ingredients);
+                
+                var groupedIngredients = ingredientsList.GroupBy(x => x.Name);
 
-            return Ok(groupedIngredients);
+                return Ok(groupedIngredients);
+            }
+            catch (System.Exception)
+            {
+                return BadRequest(new ErrorDTO { Title = "An error occured while gather the ingredient list" });
+            }
         }
     }
 }
