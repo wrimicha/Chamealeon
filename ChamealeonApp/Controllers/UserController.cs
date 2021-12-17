@@ -128,7 +128,18 @@ namespace ChamealeonApp.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            await _userManager.DeleteAsync(await _userManager.FindByIdAsync(id));
+
+            //find the user
+            var user = await _userManager.FindByIdAsync(id);
+
+            //
+
+
+
+            await _userManager.DeleteAsync(user);
+
+            
+
 
             //TODO: delete associated meal plan
 
