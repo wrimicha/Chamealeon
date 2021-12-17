@@ -153,7 +153,7 @@ namespace ChamealeonApp.Controllers
                                                  .Include(u => u.CurrentMealPlan)
                                                  .ThenInclude(m => m.MealDays.OrderBy(md => md.Day)) //.OrderBy(md=>md.Day) - Don't need this days already in order
                                                  .ThenInclude(md => md.Meals)
-                                                 .ThenInclude(i => i.Ingredients)
+                                                 .ThenInclude(n => n.NutritionInfo)
                                                  .FirstOrDefaultAsync(us => us.NormalizedEmail
                                                  .Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
 

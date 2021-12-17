@@ -6,7 +6,7 @@ import "../../styles/MealCard.css"
 import { IoSwapHorizontalOutline } from "react-icons/io5"
 
 
-const SwapMealModal = ({show, setShow }) => {
+const SwapMealModal = ({show, setShow, image, title, cals, carbs, protein, fat}) => {
 
   // const handleClose = () => {
   //   setShow(false);
@@ -41,30 +41,30 @@ return (
              {/* <div className="meal-card-thumb" style={{ backgroundImage: "url(" + props.bg + ")" }}>
              </div> */}
             
-            <div className="meal-card-thumb" style={{ backgroundImage: "url(https://www.pexels.com/photo/1640777/download/)" }}>
+            <div className="meal-card-thumb" style={{ backgroundImage: `url(${image})` }}>
               <Button className="modal-button" onClick={() => show ? setShow(false) : setShow(true)}><IoSwapHorizontalOutline /></Button>
             </div>
         
              <div className="meal-card-text">
-                 <p className="card-title">Carrot & Rice with Bell Pepper</p>
+                 <p className="card-title">{title}</p>
                {/* <a href="#">{props.name}</a> */}
                <div className="macros-container">
 
                      <div className="macro-group">
                          <p className="macro-title">Calories</p>
-                         <p className="macro-value">800</p>
+                         <p className="macro-value">{cals}</p>
                      </div>
                      <div className="macro-group">
                          <p className="macro-title">Carbs</p>
-                         <p className="macro-value">800</p>
-                         <p className="macro-title">Protein</p>
+                         <p className="macro-value">{carbs}</p>
                      </div>
                      <div className="macro-group">
-                         <p className="macro-value">800</p>
+                         <p className="macro-title">Protein</p>
+                         <p className="macro-value">{protein}</p>
                      </div>
                      <div className="macro-group">
                         <p className="macro-title">Fat</p>
-                        <p className="macro-value">800</p>
+                        <p className="macro-value">{fat}</p>
                      </div>
 
                  </div>
