@@ -5,19 +5,53 @@ import { FaHamburger, FaUtensilSpoon } from "react-icons/fa"
 import { VscSymbolNamespace } from "react-icons/vsc"
 import { MdOutlineIntegrationInstructions, MdPriceChange } from "react-icons/md"
 import { Button, Input, InputGroup, InputGroupText } from "reactstrap"
+import axios from "axios"
 
 const CreateNewMeal = () => {
 
     const [inputs, setInputs] = useState({
+        ingredients: "",
+        cost: "",
+        prepTime: "",
+        instructions: "",
+        name: "",
+        calories: "",
+        fat: "",
+        sodium: "",
+        carbs: "",
+        protein: "",
+        sugar: ""
 
     })
 
-    const handleInputChange = () => {
-
+    const handleInputChange = (event) => {
+        const value = event.target.value;
+        setInputs({
+            ...inputs,
+            [event.target.name]: value
+        });
     }
 
-    const handleSignUp = () => {
-
+    const handleCreate = () => {
+        const config = {
+            headers: { Authorization: `Bearer ${token}` }
+        };
+        axios.post("http://localhost:5000/api/meal",
+            {
+                ingredients: inputs.nutritionInfo,
+                cost: inputs.cost,
+                prepTime: inputs.prepTime,
+                instructions: inputs.instructions,
+                name: inputs.name,
+                nutritionInfo: {
+                    calories: inputs.calories,
+                    fat: inputs.fat,
+                    sodium: inputs.sodium,
+                    carbs: inputs.carbs,
+                    protein: inputs.protein,
+                    sugar: inputs.sugar
+                }
+            }, config).then(result => console.log(result.status))
     }
 
     return (
@@ -103,7 +137,7 @@ const CreateNewMeal = () => {
             <Button
                 color="success"
                 outline
-                onClick={handleSignUp}
+                onClick={handleCreate}
             >
                 Submit Meal
             </Button>
