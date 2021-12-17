@@ -6,22 +6,36 @@
 
 .meal-card-group {
   flex: 1 0 32%;
-  max-width: 28%;
+  max-width: 30%;
+  max-height: 370px;
   flex-direction: column;
   display: flex;
-  margin: 2.66%;
+  margin: 1.26%;
   margin-bottom: 10px;
   border-radius: 20px;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   transition: all 0.3s ease-in-out;
 }
 
+/* .meal-card-group-popup {
+    flex: 1 0 32%;
+    max-width: 30%;
+    max-height: 270px;
+    flex-direction: column;
+    display: flex;
+    margin: 1.26%;
+    margin-bottom: 10px;
+    border-radius: 20px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    transition: all 0.3s ease-in-out;
+  } */
+
 .meal-card-group:hover {
   transform: scale(1.02);
 }
 
 .card-title {
-  margin: 20px;
+  margin: 15px;
   text-align: center;
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
@@ -31,6 +45,7 @@
 .macros-container {
   display: flex;
   justify-content: space-evenly;
+  padding: 0;
 }
 
 .macro-group {

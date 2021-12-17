@@ -21,8 +21,8 @@ const Home = () => {
       </SwapModal>
       {/* <div show={false}>HELLO</div> */}
 
-      <div className="meal-container">
-
+      {/* <div className="meal-container"> */}
+      <div style={{ display: 'flex', flexWrap: "wrap", width: '100%'}}>
         <MealCard 
         modalShow={modalShow}
         setShow={setModalShow} />
