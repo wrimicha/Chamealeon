@@ -1,31 +1,48 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import MealCard from '../MealCard/MealCard'
 import '../../styles/SwapMeal.css'
-import { Button } from 'react-bootstrap';
+import axios from 'axios';
 
+export default function SwapWithUserMeal({ dayIndex, mealIndex }) {
+    const token = localStorage.getItem("jwt");
+    const config = {
+        headers: { Authorization: `Bearer ${token}` }
+    };
 
-export default function SwapWithUserMeal() {
-    //make a request to get logged in user's meals
-    //paginate? randomized?
-    function clickedMeal() {
-        alert("You clicked this meal")
+    const [displayedMeals, setDisplayedMeals] = useState([])
+
+    useEffect(() => {
+        //Reference; https://stackabuse.com/making-asynchronous-http-requests-in-javascript-with-axios/
+        axios.get('http://localhost:5000/api/swapmeal/displayUserMeals', config)
+            .then(resp => {
+                console.log(resp.data)
+                setDisplayedMeals(resp.data)
+            }).then(
+
+            )
+            .catch(err => {
+                console.error(err);
+            });
+    }, [])
+
+    function swapSelectedMeal(e) {
+        //api
+        //Reference; https://stackabuse.com/making-asynchronous-http-requests-in-javascript-with-axios/
+        //TODO: get the id of the clicked meal
+        const userMealId = e.target.id.value;
+        axios.put(`http://localhost:5000/api/mealPlan/updateMealPlanWithUserMeal/${userMealId}?day=${dayIndex}&mealIndexInDay=${mealIndex}`, config)
+            .then(resp => {
+                alert("Swapped meal")
+            })
+            .catch(err => {
+                console.error(err);
+            });
     }
 
     return (
         <div>
             <div className="meal-container">
-                <div>
-                    <MealCard onClick={clickedMeal}></MealCard>
-                </div>
-                <Button onClick={clickedMeal}>
-                    <MealCard />
-                </Button>
-                <div>
-                    <MealCard onClick={clickedMeal}></MealCard>
-                </div>
-                <div>
-                    <MealCard onClick={clickedMeal}></MealCard>
-                </div>
+                {displayedMeals.map((data) => <MealCard></MealCard>)}
             </div>
         </div>
     );
