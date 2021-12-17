@@ -62,10 +62,16 @@ namespace ChamealeonApp.Controllers
         [HttpGet("displaySpoonacularMeals")]
         public async Task<IActionResult> GetSpoonacularMealDetails(string query)
         {
-            //TODO: accept values for other filter criteria
-            var suggestions = await SpoonacularAPIHelper.GetMealSuggestions(query);
+            try{
+                //TODO: accept values for other filter criteria
+                var suggestions = await SpoonacularAPIHelper.GetMealSuggestions(query);
 
-            return Ok(suggestions);
+                return Ok(suggestions);
+            }
+            catch (System.Exception)
+            {
+                return BadRequest(new ErrorDTO { Title = "An error occured in grabbing meal suggestions from Spoonacular API" });
+            }
         }
     }
 }

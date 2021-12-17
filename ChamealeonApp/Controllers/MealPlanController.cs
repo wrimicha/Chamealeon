@@ -25,8 +25,6 @@ namespace ChamealeonApp.Controllers
     [Route("api/[controller]")]
     public class MealPlanController : Controller
     {
-
-
         private readonly DataContext _context;
         private readonly UserManager<User> _userManager;
 
@@ -149,22 +147,24 @@ namespace ChamealeonApp.Controllers
         [HttpGet]
         public async Task<IActionResult> GetMealPlanFromDb()
         {
+            try{
+                //get the user meals order by the day of the week
+                var loggedInUser = await _userManager.Users
+                                                    .Include(u => u.CurrentMealPlan)
+                                                    .ThenInclude(m => m.MealDays.OrderBy(md => md.Day)) //.OrderBy(md=>md.Day) - Don't need this days already in order
+                                                    .ThenInclude(md => md.Meals)
+                                                    .ThenInclude(n => n.NutritionInfo)
+                                                    .FirstOrDefaultAsync(us => us.NormalizedEmail
+                                                    .Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
 
-            //TODO: Add Error Checking
+                //get the user's meal plan
+                var mealPlan = loggedInUser.CurrentMealPlan;
 
-            //get the user meals order by the day of the week
-            var loggedInUser = await _userManager.Users
-                                                 .Include(u => u.CurrentMealPlan)
-                                                .ThenInclude(m => m.MealDays.OrderBy(md => md.Day)) //.OrderBy(md=>md.Day) - Don't need this days already in order
-                                                 .ThenInclude(md => md.Meals)
-                                                 .ThenInclude(n => n.NutritionInfo)
-                                                 .FirstOrDefaultAsync(us => us.NormalizedEmail
-                                                 .Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
-
-            //get the user's meal plan
-            var mealPlan = loggedInUser.CurrentMealPlan;
-
-            return Ok(mealPlan);
+                return Ok(mealPlan);
+            }
+            catch{
+                return BadRequest(new ErrorDTO { Title = "An error occured removing meal from meal plan" });
+            }
         }
 
         //Mike
@@ -174,28 +174,32 @@ namespace ChamealeonApp.Controllers
         //user needs to pass int of enum of DaysOfWeek (ex 3 = wednesday)
         public async Task<IActionResult> DeleteMealFromMealPlan(DayOfWeek day, int mealIndexInDay)
         {
+            try{
+                //get the user meals order by the day of the week
+                var loggedInUser = await _userManager.Users
+                                                    .Include(u => u.CurrentMealPlan)
+                                                    .ThenInclude(m => m.MealDays)
+                                                    .ThenInclude(md => md.Meals)
+                                                    .FirstOrDefaultAsync(us => us.NormalizedEmail
+                                                    .Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
 
-            //TODO: Add Error Checking
+                //find the meal in the mealplan
+                //var mealToDelete = loggedInUser.CurrentMealPlan.MealDays[(int)day].Meals[mealIndexInDay];
+                var mealToDelete = loggedInUser.CurrentMealPlan.MealDays.FirstOrDefault(md => (((int)md.Day).Equals((int)day))).Meals[mealIndexInDay];
 
-            //get the user meals order by the day of the week
-            var loggedInUser = await _userManager.Users
-                                                 .Include(u => u.CurrentMealPlan)
-                                                 .ThenInclude(m => m.MealDays)
-                                                 .ThenInclude(md => md.Meals)
-                                                 .FirstOrDefaultAsync(us => us.NormalizedEmail
-                                                 .Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
+                //delete the meal
+                loggedInUser.CurrentMealPlan.MealDays[(int)day].Meals.Remove(mealToDelete);
 
-            //find the meal in the mealplan
-            //var mealToDelete = loggedInUser.CurrentMealPlan.MealDays[(int)day].Meals[mealIndexInDay];
-            var mealToDelete = loggedInUser.CurrentMealPlan.MealDays.FirstOrDefault(md => (((int)md.Day).Equals((int)day))).Meals[mealIndexInDay];
+                //update the database        
+                await _context.SaveChangesAsync();
 
-            //delete the meal
-            loggedInUser.CurrentMealPlan.MealDays[(int)day].Meals.Remove(mealToDelete);
-
-            //update the database        
-            await _context.SaveChangesAsync();
-
-            return Ok(mealToDelete);
+                return Ok(mealToDelete);
+            }
+            catch{
+                return BadRequest(new ErrorDTO { Title = "An error occured removing meal from meal plan" });
+            }
+            
         }
+        
     }
 }

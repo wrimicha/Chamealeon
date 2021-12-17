@@ -126,25 +126,17 @@ namespace ChamealeonApp.Controllers
         //mike
         [Authorize]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete()
         {
 
             //find the user
-            var user = await _userManager.FindByIdAsync(id);
-
-            //
-
-
+            var user = await _userManager.Users.FirstOrDefaultAsync(us => us.NormalizedEmail
+                    .Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
 
             await _userManager.DeleteAsync(user);
 
-            
-
-
-                //TODO: delete associated meal plan
-
-                //await _context.SaveChangesAsync();
-                return Ok();
+            //await _context.SaveChangesAsync();
+            return Ok();
         }
 
         //Amir
