@@ -1,4 +1,9 @@
 import { useState } from "react"
+import { BiTimer } from "react-icons/bi"
+import { GiMeat, GiFoodTruck, GiSlicedBread, GiSaltShaker, GiSugarCane } from "react-icons/gi"
+import { FaHamburger, FaUtensilSpoon } from "react-icons/fa"
+import { VscSymbolNamespace } from "react-icons/vsc"
+import { MdOutlineIntegrationInstructions, MdPriceChange } from "react-icons/md"
 import { Button, Input, InputGroup, InputGroupText } from "reactstrap"
 
 const CreateNewMeal = () => {
@@ -19,77 +24,77 @@ const CreateNewMeal = () => {
         <div>
             <InputGroup>
                 <InputGroupText>
-                    {/* <HiOutlineMail /> */}
+                    <FaUtensilSpoon />
                 </InputGroupText>
                 <Input name="Ingredients" value={inputs.ingredients} onChange={handleInputChange} placeholder="ingredients" />
             </InputGroup>
             <br />
             <InputGroup>
                 <InputGroupText>
-                    {/* <HiOutlineMail /> */}
+                    <MdPriceChange />
                 </InputGroupText>
                 <Input name="Cost" value={inputs.cost} onChange={handleInputChange} placeholder="cost" />
             </InputGroup>
             <br />
             <InputGroup>
                 <InputGroupText>
-                    {/* <HiOutlineMail /> */}
+                    <BiTimer />
                 </InputGroupText>
                 <Input name="PrepTime" value={inputs.prepTime} onChange={handleInputChange} placeholder="prep time" />
             </InputGroup>
             <br />
             <InputGroup>
                 <InputGroupText>
-                    {/* <HiOutlineMail /> */}
+                    <MdOutlineIntegrationInstructions />
                 </InputGroupText>
                 <Input name="Instructions" value={inputs.instructions} onChange={handleInputChange} placeholder="instruction" />
             </InputGroup>
             <br />
             <InputGroup>
                 <InputGroupText>
-                    {/* <HiOutlineMail /> */}
+                    <VscSymbolNamespace />
                 </InputGroupText>
                 <Input name="name" value={inputs.name} onChange={handleInputChange} placeholder="name" />
             </InputGroup>
             <br />
             <InputGroup>
                 <InputGroupText>
-                    {/* <HiOutlineMail /> */}
+                    <GiFoodTruck />
                 </InputGroupText>
                 <Input name="Calories" value={inputs.calories} onChange={handleInputChange} placeholder="calories" />
             </InputGroup>
             <br />
             <InputGroup>
                 <InputGroupText>
-                    {/* <HiOutlineMail /> */}
+                    <FaHamburger />
                 </InputGroupText>
                 <Input name="Fat" value={inputs.fat} onChange={handleInputChange} placeholder="fat" />
             </InputGroup>
             <br />
             <InputGroup>
                 <InputGroupText>
-                    {/* <HiOutlineMail /> */}
+                    <GiMeat />
                 </InputGroupText>
                 <Input name="Protein" value={inputs.protein} onChange={handleInputChange} placeholder="protein" />
             </InputGroup>
             <br />
             <InputGroup>
                 <InputGroupText>
-                    {/* <HiOutlineMail /> */}
+                    <GiSlicedBread />
                 </InputGroupText>
                 <Input name="Carbs" value={inputs.carbs} onChange={handleInputChange} placeholder="carbs" />
             </InputGroup>
             <br />
             <InputGroup>
                 <InputGroupText>
-                    {/* <HiOutlineMail /> */}
+                    <GiSaltShaker />
                 </InputGroupText>
                 <Input name="Sodium" value={inputs.sodium} onChange={handleInputChange} placeholder="sodium" />
             </InputGroup>
             <br />
             <InputGroup>
                 <InputGroupText>
-                    {/* <HiOutlineMail /> */}
+                    <GiSugarCane />
                 </InputGroupText>
                 <Input name="Sugar" value={inputs.sugar} onChange={handleInputChange} placeholder="sugar" />
             </InputGroup>

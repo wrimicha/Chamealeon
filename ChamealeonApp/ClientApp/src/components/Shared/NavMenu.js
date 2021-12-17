@@ -33,6 +33,9 @@ export const NavMenu = ({ authHook }) => {
         <NavLink tag={Link} className="text-dark" to="/CreateMealPlan">Create Plan</NavLink>
       </NavItem>
       <NavItem>
+        <NavLink tag={Link} className="text-dark" to="/CreateNewMeal">Create New Meal</NavLink>
+      </NavItem>
+      <NavItem>
         <Button color="danger" onClick={()=> {
           localStorage.removeItem("jwt")
           setAuth(false)
