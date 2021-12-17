@@ -2,10 +2,11 @@ import React from 'react';
 import MealCard from '../MealCard/MealCard'
 import '../../styles/Home.css'
 import SwapMealModal from './SwapMealModal';
+import { Modal } from 'reactstrap';
 
 
 const Home = () => {
-  
+
   return (
     <div>
       <div className="meal-container">
@@ -15,9 +16,9 @@ const Home = () => {
         <MealCard />
         <MealCard />
         <MealCard />
-        {/* <Modal>
+        <Modal>
           <SwapMealModal />
-        </Modal> */}
+        </Modal>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import { Redirect, Route } from "react-router-dom";
 const PublicRoute = ({ component: Component, restricted, authHook, ...rest }) => {
-    const [auth, setAuth] = authHook
+    const [auth] = authHook
     
     console.log(auth)
     return (

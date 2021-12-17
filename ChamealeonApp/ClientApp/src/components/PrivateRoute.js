@@ -2,7 +2,7 @@ import { Route, Redirect } from 'react-router';
 
 
 const PrivateRoute = ({ component: Component, authHook, ...rest }) => {
-    const [auth, setAuth] = authHook
+    const [auth] = authHook
 
     return (
         <Route {...rest} render={props => (
