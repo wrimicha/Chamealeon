@@ -42,7 +42,8 @@ namespace ChamealeonApp.Controllers
                 //UpdateMealPlanWithUserMeal in MealPlanController does that
 
 
-                var user = await _userManager.Users.Include(x => x.UserCreatedMeals).FirstOrDefaultAsync(x => x.NormalizedEmail.Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
+                var user = await _userManager.Users.Include(x => x.UserCreatedMeals).ThenInclude(m => m.Ingredients).FirstOrDefaultAsync(x => x.NormalizedEmail.Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
+                meal.Ingredients = meal.Ingredients;
                 user.UserCreatedMeals.Add(meal);
                 await _userManager.UpdateAsync(user);
                 return Created("", null);
@@ -52,6 +53,7 @@ namespace ChamealeonApp.Controllers
             {
                 return BadRequest(new ErrorDTO { Title = "Something went wrong." });
             }
+
         }
 
 

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 namespace ChamealeonApp.Models.Entities
 {
     //Author: Burhan
+    //Model represents a user object in the app
     public class User : IdentityUser
     {
         //no Id because Identity creates it by default

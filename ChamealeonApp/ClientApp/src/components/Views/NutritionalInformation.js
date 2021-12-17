@@ -22,9 +22,9 @@ export default function NutritionalInformation() {
     const config = {
         headers: { Authorization: `Bearer ${token}` }
     };
-    const userName = "Bob Jones";
     const options = {
         responsive: true,
+        //NOTE: Was unable to resize the charts
         // maintainAspectRatio: false
     };
     //state
@@ -37,8 +37,7 @@ export default function NutritionalInformation() {
         labels: ['Carbohydrates', 'Protein', 'Fat', 'Sodium', 'Sugar'],
         datasets: [
             {
-                //TODO: from API call
-                label: userName,
+                label: "Nutritional Information for the Week",
                 data: weekData,
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
@@ -64,8 +63,7 @@ export default function NutritionalInformation() {
         labels: ['Carbohydrates', 'Protein', 'Fat', 'Sodium', 'Sugar'],
         datasets: [
             {
-                //TODO: from API call
-                label: userName,
+                label: `Nutritional Information for ${day}`,
                 data: dataDay,
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',

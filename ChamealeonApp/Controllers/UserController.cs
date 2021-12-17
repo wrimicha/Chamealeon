@@ -19,7 +19,9 @@ using Microsoft.Extensions.Logging;
 
 namespace ChamealeonApp.Controllers
 {
-    //Authors: Amir and Burhan (Implemented update a user)
+    //Authors:
+    //Amir:
+    //Burhan: Implemented functionality for updating a user
     [ApiController]
     [Route("api/[controller]")]
     public class UserController : Controller
@@ -126,19 +128,23 @@ namespace ChamealeonApp.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            try
-            {
-                await _userManager.DeleteAsync(await _userManager.FindByIdAsync(id));
+
+            //find the user
+            var user = await _userManager.FindByIdAsync(id);
+
+            //
+
+
+
+            await _userManager.DeleteAsync(user);
+
+            
+
 
                 //TODO: delete associated meal plan
 
                 //await _context.SaveChangesAsync();
                 return Ok();
-            }
-            catch (System.Exception)
-            {
-                return BadRequest(new ErrorDTO { Title = "Something went wrong." });
-            }
         }
 
         //Amir

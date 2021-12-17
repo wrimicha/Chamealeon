@@ -8,6 +8,7 @@ import { Button, Input, InputGroup, InputGroupText } from "reactstrap"
 import axios from "axios"
 
 const CreateNewMeal = () => {
+    const token = localStorage.getItem("jwt");
 
     const [inputs, setInputs] = useState({
         ingredients: "",
@@ -130,7 +131,7 @@ const CreateNewMeal = () => {
                 <InputGroupText>
                     <GiSugarCane />
                 </InputGroupText>
-                <Input name="Sugar" value={inputs.sugar} onChange={handleInputChange} placeholder="sugar" />
+                <Input name="sugar" value={inputs.sugar} onChange={handleInputChange} placeholder="sugar" />
             </InputGroup>
             <br />
 

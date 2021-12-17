@@ -17,6 +17,11 @@ using Microsoft.Extensions.Logging;
 
 namespace ChamealeonApp.Controllers
 {
+    //Authors:
+    //Burhan: Implemented swaping a meal in the mealplan with a user created meal from the database
+    //Mike: 
+
+    //This controller is responsible for swapping a selected meal in the meal plan with a user created one or a Spoonacular one
     [ApiController]
     [Route("api/[controller]")]
     public class SwapMealController : Controller
@@ -36,13 +41,18 @@ namespace ChamealeonApp.Controllers
         [HttpGet("displayUserMeals")]
         public async Task<IActionResult> GetMealDetails()
         {
-            var loggedInUser = await _userManager.Users.Include(u => u.CurrentMealPlan).ThenInclude(m => m.MealDays).ThenInclude(md => md.Meals).FirstOrDefaultAsync(us => us.NormalizedEmail
+            //ensure all information is displayed
+            var loggedInUser = await _userManager.Users.Include(u => u.CurrentMealPlan).ThenInclude(mp => mp.MealDays).ThenInclude(md => md.Meals)
+            .ThenInclude(m => m.Ingredients).Include(u => u.UserCreatedMeals).ThenInclude(m => m.NutritionInfo).FirstOrDefaultAsync(us => us.NormalizedEmail
            .Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
 
             //list of user meals
-            var userMeals = loggedInUser.UserCreatedMeals;
+            //Reference: https://stackoverflow.com/questions/3173718/how-to-get-a-random-object-using-linq/3173726
+            var rnd = new Random();
+            var userMeals = loggedInUser.UserCreatedMeals.OrderBy(m => rnd.Next()).Take(5);
 
-            //TODO: take(4) or maybe randomize, pagination
+
+
             return Ok(userMeals);
         }
 
