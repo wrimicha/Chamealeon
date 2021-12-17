@@ -98,6 +98,7 @@ export default function NutritionalInformation() {
                 setWeekData([resp.data.carbs, resp.data.protein, resp.data.fat, resp.data.sodium / 1000, resp.data.sugar]);
             })
             .catch(err => {
+                alert("No meal plan was created")
                 console.error(err);
             });
 
