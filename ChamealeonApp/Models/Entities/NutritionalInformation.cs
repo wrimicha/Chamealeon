@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+// Author: Amir, entity for nutritional information
 namespace ChamealeonApp.Models.Entities
 {
     public class NutritionalInformation

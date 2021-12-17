@@ -151,7 +151,8 @@ namespace ChamealeonApp.Controllers
         [HttpGet("userDetails")]
         public async Task<IActionResult> GetUserDetailsAsyncAsync()
         {
-            var user = await _userManager.Users.Include(u => u.PersonalNutritionalInformationGoal).FirstOrDefaultAsync(us => us.NormalizedEmail
+            try {
+                var user = await _userManager.Users.Include(u => u.PersonalNutritionalInformationGoal).FirstOrDefaultAsync(us => us.NormalizedEmail
                     .Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
 
             return Ok(new
@@ -163,6 +164,11 @@ namespace ChamealeonApp.Controllers
                 Calories = user.PersonalNutritionalInformationGoal.Calories,
                 Age = user.Age
             });
+            }
+            catch (System.Exception)
+            {
+                return BadRequest(new ErrorDTO { Title = "Something went wrong." });
+            }
         }
 
     }
