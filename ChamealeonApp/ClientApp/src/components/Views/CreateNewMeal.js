@@ -131,7 +131,7 @@ const CreateNewMeal = () => {
                 <InputGroupText>
                     <GiSugarCane />
                 </InputGroupText>
-                <Input name="Sugar" value={inputs.sugar} onChange={handleInputChange} placeholder="sugar" />
+                <Input name="sugar" value={inputs.sugar} onChange={handleInputChange} placeholder="sugar" />
             </InputGroup>
             <br />
 

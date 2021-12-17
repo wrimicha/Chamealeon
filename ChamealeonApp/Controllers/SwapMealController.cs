@@ -36,7 +36,9 @@ namespace ChamealeonApp.Controllers
         [HttpGet("displayUserMeals")]
         public async Task<IActionResult> GetMealDetails()
         {
-            var loggedInUser = await _userManager.Users.Include(u => u.CurrentMealPlan).Include(u => u.UserCreatedMeals).FirstOrDefaultAsync(us => us.NormalizedEmail
+            //ensure all information is displayed
+            var loggedInUser = await _userManager.Users.Include(u => u.CurrentMealPlan).ThenInclude(mp => mp.MealDays).ThenInclude(md => md.Meals)
+            .ThenInclude(m => m.Ingredients).Include(u => u.UserCreatedMeals).ThenInclude(m => m.NutritionInfo).FirstOrDefaultAsync(us => us.NormalizedEmail
            .Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
 
             //list of user meals
