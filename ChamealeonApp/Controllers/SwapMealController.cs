@@ -17,6 +17,11 @@ using Microsoft.Extensions.Logging;
 
 namespace ChamealeonApp.Controllers
 {
+    //Authors:
+    //Burhan: Implemented swaping a meal in the mealplan with a user created meal from the database
+    //Mike: 
+
+    //This controller is responsible for swapping a selected meal in the meal plan with a user created one or a Spoonacular one
     [ApiController]
     [Route("api/[controller]")]
     public class SwapMealController : Controller

@@ -21,7 +21,7 @@ export const NavMenu = ({ authHook }) => {
       </NavItem>
 
       <NavItem>
-        <NavLink tag={Link} className="text-dark" to="/NutritionalInformation">Nutritional Information</NavLink>
+        <NavLink tag={Link} className="text-dark" to="/NutritionalInformation">Nutrition Info</NavLink>
       </NavItem>
       <NavItem>
         <NavLink tag={Link} className="text-dark" to="/ShoppingList">Shopping List</NavLink>
@@ -33,10 +33,13 @@ export const NavMenu = ({ authHook }) => {
         <NavLink tag={Link} className="text-dark" to="/CreateMealPlan">Create Plan</NavLink>
       </NavItem>
       <NavItem>
-        <NavLink tag={Link} className="text-dark" to="/CreateNewMeal">Create New Meal</NavLink>
+        <NavLink tag={Link} className="text-dark" to="/CreateNewMeal">Create Meal</NavLink>
       </NavItem>
       <NavItem>
-        <Button color="danger" onClick={()=> {
+        <NavLink tag={Link} className="text-dark" to="/SwapWithUserMeals">Swap (User Meals)</NavLink>
+      </NavItem>
+      <NavItem>
+        <Button color="danger" onClick={() => {
           localStorage.removeItem("jwt")
           setAuth(false)
         }}>

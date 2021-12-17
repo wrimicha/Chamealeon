@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Form, Button, Row, ListGroupItem, ListGroup } from 'react-bootstrap';
 import axios from 'axios';
 //R: https://react-bootstrap.github.io/components/forms/#forms-range
@@ -63,7 +63,7 @@ export default function CreateMealPlan() {
 
                     <ListGroup>
                         {restrictions.map(food =>
-                            <ListGroupItem className="text-muted" Text={food}>
+                            <ListGroupItem key={Math.random()} className="text-muted">
                                 {food}
                                 <br></br>
                             </ListGroupItem>

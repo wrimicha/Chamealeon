@@ -17,6 +17,7 @@ namespace ChamealeonApp.Controllers
     [ApiController]
     [Route("api/[controller]")]
     //Author: Burhan
+    //This controller is responsible for getting the nutritional information of the meal plan for the week and a day
     public class NutritionController : ControllerBase
     {
         private readonly DataContext _context;

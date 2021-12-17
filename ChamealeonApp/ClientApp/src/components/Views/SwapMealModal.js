@@ -9,34 +9,6 @@ const SwapMealModal = ({ modalShow, setShow }) => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // const handleClose = () => {
-  //   setShow(false);
-  //   setError("");
-  // }
-
-  const handleSubmit = async (e) => {
-    // e.preventDefault(); //not needed unless using the form submit?
-
-    // //error validation
-    // if (emailRef.current.value.trim() === "") {
-    //   return setError("Email cannot be blank");
-    // }
-    // if (passwordRef.current.value.trim() === "") {
-    //   return setError("Password cannot be blank");
-    // }
-
-    // setError("");
-    // setLoading(true);
-    // login(emailRef.current.value, passwordRef.current.value).then(
-    //   () => handleClose()
-    //   // .then(() => history.push("/"))
-    // ).catch((e) => {
-    //   setError(e.message);
-    // });
-    // addAdminRole();
-    // setLoading(false);
-  };
-
   return (
     <>
       <Modal

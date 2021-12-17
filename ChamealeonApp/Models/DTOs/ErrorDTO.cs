@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 namespace ChamealeonApp.Models.DTOs
 {
     //Author: Burhan
+    //DTO used for displaying an error to console
     public class ErrorDTO
     {
         public int Status { get; set; }
