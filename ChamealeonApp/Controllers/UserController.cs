@@ -19,7 +19,9 @@ using Microsoft.Extensions.Logging;
 
 namespace ChamealeonApp.Controllers
 {
-    //Authors: Amir and Burhan (Implemented update a user)
+    //Authors:
+    //Amir:
+    //Burhan: Implemented functionality for updating a user
     [ApiController]
     [Route("api/[controller]")]
     public class UserController : Controller

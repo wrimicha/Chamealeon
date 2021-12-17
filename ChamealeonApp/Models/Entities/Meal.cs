@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 namespace ChamealeonApp.Models.Entities
 {
     //Author: Burhan
+    //Model is used to represent a meal object
     public class Meal
     {
         public Guid Id { get; set; }
