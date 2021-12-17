@@ -78,6 +78,9 @@ namespace ChamealeonApp.Controllers
 
         //day of week is an enum, 0=Sunday
         //each day has a list of 3 meals, indices are 0,1 and 2
+        //NOTE: Realized last minute that the database does NOT store the meals in the order of the index, it is most likely stored by id
+        //This may or may not update the meal plan correctly but not enough time was left to determine the real reason
+
         public async Task<IActionResult> UpdateMealPlanWithUserMeal(string id, DayOfWeek day = DayOfWeek.Sunday, int mealIndexInDay = 0)
         {
             try
@@ -88,14 +91,15 @@ namespace ChamealeonApp.Controllers
                 }
 
                 //get the logged in user 
-                var loggedInUser = await _userManager.Users.Include(u => u.CurrentMealPlan).ThenInclude(m => m.MealDays).ThenInclude(md => md.Meals).FirstOrDefaultAsync(us => us.NormalizedEmail
+                var loggedInUser = await _userManager.Users.Include(u => u.CurrentMealPlan).ThenInclude(m => m.MealDays.OrderBy(md => md.Day)).ThenInclude(md => md.Meals).FirstOrDefaultAsync(us => us.NormalizedEmail
                 .Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
 
                 //find the meal in the database that they want to replace with, the spoonacular id should be empty if its a user defined meal
                 var mealInDb = await _context.Meals.Where(m => m.SpoonacularMealId == 0).FirstOrDefaultAsync(userMeals => userMeals.Id.Equals(new Guid(id.Trim())));
 
                 //replace the user meal with the new meal by getting the meal plan, get the day of the week, get the meal object in the list of meals for that day
-                loggedInUser.CurrentMealPlan.MealDays.FirstOrDefault(m => m.Day == day).Meals[mealIndexInDay] = mealInDb;
+                var mealToReplace = loggedInUser.CurrentMealPlan.MealDays.FirstOrDefault(m => m.Day == day).Meals[mealIndexInDay];
+                mealToReplace = mealInDb;
 
                 await _userManager.UpdateAsync(loggedInUser);
 
@@ -151,7 +155,7 @@ namespace ChamealeonApp.Controllers
             //get the user meals order by the day of the week
             var loggedInUser = await _userManager.Users
                                                  .Include(u => u.CurrentMealPlan)
-                                                 .ThenInclude(m => m.MealDays.OrderBy(md => md.Day)) //.OrderBy(md=>md.Day) - Don't need this days already in order
+                                                .ThenInclude(m => m.MealDays.OrderBy(md => md.Day)) //.OrderBy(md=>md.Day) - Don't need this days already in order
                                                  .ThenInclude(md => md.Meals)
                                                  .ThenInclude(i => i.Ingredients)
                                                  .FirstOrDefaultAsync(us => us.NormalizedEmail
