@@ -60,8 +60,12 @@ const Home = () => {
 
             <div style={{ display: 'flex', flexWrap: "wrap", width: '100%'}}>
 
-              {data.meals.map((meals) =>
+              {data.meals.map((meals, index) =>
                 <MealCard
+                key={meals.id}
+                id={meals.id}
+                mealDay={meals.day}
+                mealIndex={index}
                 modalShow={modalShow}
                 setShow={setModalShow}
                 image={meals.imageUrl}

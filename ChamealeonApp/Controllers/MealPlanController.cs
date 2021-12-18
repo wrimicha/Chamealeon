@@ -147,7 +147,8 @@ namespace ChamealeonApp.Controllers
         [HttpGet]
         public async Task<IActionResult> GetMealPlanFromDb()
         {
-            try{
+            try
+            {
                 //get the user meals order by the day of the week
                 var loggedInUser = await _userManager.Users
                                                     .Include(u => u.CurrentMealPlan)
@@ -162,7 +163,8 @@ namespace ChamealeonApp.Controllers
 
                 return Ok(mealPlan);
             }
-            catch{
+            catch
+            {
                 return BadRequest(new ErrorDTO { Title = "An error occured removing meal from meal plan" });
             }
         }
@@ -174,7 +176,8 @@ namespace ChamealeonApp.Controllers
         //user needs to pass int of enum of DaysOfWeek (ex 3 = wednesday)
         public async Task<IActionResult> DeleteMealFromMealPlan(DayOfWeek day, int mealIndexInDay)
         {
-            try{
+            try
+            {
                 //get the user meals order by the day of the week
                 var loggedInUser = await _userManager.Users
                                                     .Include(u => u.CurrentMealPlan)
@@ -188,18 +191,19 @@ namespace ChamealeonApp.Controllers
                 var mealToDelete = loggedInUser.CurrentMealPlan.MealDays.FirstOrDefault(md => (((int)md.Day).Equals((int)day))).Meals[mealIndexInDay];
 
                 //delete the meal
-                loggedInUser.CurrentMealPlan.MealDays[(int)day].Meals.Remove(mealToDelete);
+                loggedInUser.CurrentMealPlan.MealDays.FirstOrDefault(md => (((int)md.Day).Equals((int)day))).Meals.Remove(mealToDelete);
 
                 //update the database        
-                await _context.SaveChangesAsync();
+                await _userManager.UpdateAsync(loggedInUser);
 
                 return Ok(mealToDelete);
             }
-            catch{
+            catch
+            {
                 return BadRequest(new ErrorDTO { Title = "An error occured removing meal from meal plan" });
             }
-            
+
         }
-        
+
     }
 }
