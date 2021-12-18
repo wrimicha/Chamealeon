@@ -20,10 +20,6 @@ namespace ChamealeonApp.Controllers
     public class ShoppingListController : Controller
     {
 
-
-        
-
-
         private readonly DataContext _context;
         private readonly UserManager<User> _userManager;
 
@@ -34,7 +30,7 @@ namespace ChamealeonApp.Controllers
             this._userManager = userManager;
         }
 
-        //mike
+        //Mike
         //GET general ingredients (from db)
         [Authorize]
         [HttpGet]

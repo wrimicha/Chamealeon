@@ -19,7 +19,7 @@ namespace ChamealeonApp.Controllers
 {
     //Authors: 
     //Burhan (Implemented generating the meal plan and getting a meal full details from the Spoonacular API, updating meal plan with a user created meal
-    //Mike
+    //Mike - Update, Get, and Delete meals from the meal plan
     //This controller is responsible for managing a meal plan
     [ApiController]
     [Route("api/[controller]")]
@@ -112,15 +112,13 @@ namespace ChamealeonApp.Controllers
         }
 
         // Mike
-        // PUT update a specific meal in the 
-        //TODO: Test with postman once we have GET route for the weekly meal plan
+        // PUT update a specific meal in the meal plan
         [Authorize]
         [HttpPut("updateMealPlanWithSpoonacularMeal")]
         public async Task<IActionResult> UpdateMealPlanWithSpoonacularMeal(int spoonacularId, DayOfWeek day, int mealIndexInDay)
         {
-
-            //TODO: Gets the meal in the meal plan and recplaces it with the choosen meal
-
+            try
+            {
             //make sure it saves to the user
             //get the logged in user 
             var loggedInUser = await _userManager.Users
@@ -139,6 +137,11 @@ namespace ChamealeonApp.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(loggedInUser.CurrentMealPlan.MealDays[(int)day].Meals.ToList());
+            }
+            catch
+            {
+                return BadRequest(new ErrorDTO { Title = "An error occured updating the meal plan" });
+            }
         }
 
         //Mike
@@ -174,7 +177,7 @@ namespace ChamealeonApp.Controllers
         [Authorize]
         [HttpDelete("removeMealFromMealPlan")]
         //user needs to pass int of enum of DaysOfWeek (ex 3 = wednesday)
-        public async Task<IActionResult> DeleteMealFromMealPlan(DayOfWeek day = DayOfWeek.Sunday, int mealIndexInDay = 0)
+        public async Task<IActionResult> DeleteMealFromMealPlan([FromQuery] DayOfWeek day = DayOfWeek.Sunday, int mealIndexInDay = 0)
         {
             try
             {

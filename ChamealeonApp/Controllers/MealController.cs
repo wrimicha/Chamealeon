@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using ChamealeonApp.Models.DTOs;
 using ChamealeonApp.Models.Entities;
 using ChamealeonApp.Models.Helpers;
 using ChamealeonApp.Models.Persistence;
@@ -14,7 +13,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-// Author : Amir. Creates meals and gets meal details
 namespace ChamealeonApp.Controllers
 {
     [ApiController]
@@ -37,23 +35,16 @@ namespace ChamealeonApp.Controllers
         public async Task<IActionResult> PostCustomMeal([FromBody] Meal meal)
 
         {
-            try
-            {
-                //UpdateMealPlanWithUserMeal in MealPlanController does that
+            //UpdateMealPlanWithUserMeal in MealPlanController does that
 
 
-                var user = await _userManager.Users.Include(x => x.UserCreatedMeals).ThenInclude(m => m.Ingredients).FirstOrDefaultAsync(x => x.NormalizedEmail.Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
-                meal.Ingredients = meal.Ingredients;
-                user.UserCreatedMeals.Add(meal);
-                await _userManager.UpdateAsync(user);
-                return Created("", null);
+            //TODO error check
 
-            }
-            catch (System.Exception)
-            {
-                return BadRequest(new ErrorDTO { Title = "Something went wrong." });
-            }
-
+            var user = await _userManager.Users.Include(x => x.UserCreatedMeals).ThenInclude(m => m.Ingredients).FirstOrDefaultAsync(x => x.NormalizedEmail.Equals(User.FindFirstValue(ClaimTypes.Email).ToUpper()));
+            meal.Ingredients = meal.Ingredients;
+            user.UserCreatedMeals.Add(meal);
+            await _userManager.UpdateAsync(user);
+            return Created("", null);
         }
 
 
@@ -62,17 +53,7 @@ namespace ChamealeonApp.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetMealDetails(string id)
         {
-            try
-            {
-                return Ok(await _context.Meals.Include(m => m.Ingredients).Include(m => m.NutritionInfo).FirstOrDefaultAsync(x => x.Id == new Guid(id)));
-
-            }
-            catch (System.Exception)
-            {
-
-                return BadRequest(new ErrorDTO { Title = "Something went wrong." });
-
-            }
+            return Ok(await _context.Meals.Include(m => m.Ingredients).Include(m => m.NutritionInfo).FirstOrDefaultAsync(x => x.Id == new Guid(id)));
         }
     }
 }

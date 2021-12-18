@@ -8,7 +8,7 @@ namespace ChamealeonApp.Models.DTOs
 {
     public class ShoppingListDTO
     {
-        //mike
+        //Mike
 
         public List<Ingredient> Ingredients { get; set; }
 

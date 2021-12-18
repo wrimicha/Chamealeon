@@ -56,14 +56,12 @@ namespace ChamealeonApp.Controllers
             return Ok(userMeals);
         }
 
-
         //MIKE
         [Authorize]
         [HttpGet("displaySpoonacularMeals")]
         public async Task<IActionResult> GetSpoonacularMealDetails(string query)
         {
             try{
-                //TODO: accept values for other filter criteria
                 var suggestions = await SpoonacularAPIHelper.GetMealSuggestions(query);
 
                 return Ok(suggestions);
