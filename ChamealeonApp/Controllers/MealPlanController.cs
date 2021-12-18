@@ -174,7 +174,7 @@ namespace ChamealeonApp.Controllers
         [Authorize]
         [HttpDelete("removeMealFromMealPlan")]
         //user needs to pass int of enum of DaysOfWeek (ex 3 = wednesday)
-        public async Task<IActionResult> DeleteMealFromMealPlan(DayOfWeek day, int mealIndexInDay)
+        public async Task<IActionResult> DeleteMealFromMealPlan(DayOfWeek day = DayOfWeek.Sunday, int mealIndexInDay = 0)
         {
             try
             {

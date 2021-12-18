@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Modal, Button, Form, Alert } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "../../styles/MealCard.css"
-import { IoSwapHorizontalOutline } from "react-icons/io5"
+import { IoSwapHorizontalOutline, IoTrash } from "react-icons/io5"
 import axios from 'axios';
 
 
@@ -56,7 +56,7 @@ return (
             
             <div className="meal-card-thumb" style={{ backgroundImage: `url(${image})` }}>
               <Button className="modal-button" onClick={() => show ? setShow(false) : setShow(true)}><IoSwapHorizontalOutline /></Button>
-              <Button className="modal-button" onClick={() => handleDelete()}><IoSwapHorizontalOutline /></Button>
+              <Button className="modal-button" onClick={() => handleDelete()}><IoTrash /></Button>
             </div>
         
              <div className="meal-card-text">
