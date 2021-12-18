@@ -20,6 +20,10 @@ namespace ChamealeonApp.Controllers
     public class ShoppingListController : Controller
     {
 
+
+        
+
+
         private readonly DataContext _context;
         private readonly UserManager<User> _userManager;
 
@@ -58,7 +62,8 @@ namespace ChamealeonApp.Controllers
                 
                 var groupedIngredients = ingredientsList.GroupBy(x => x.Name);
 
-                return Ok(groupedIngredients);
+                return Ok(groupedIngredients.Select(x => new {Name = x.First().Name,
+                                                        result=x}));
             }
             catch (System.Exception)
             {

@@ -3,14 +3,27 @@ import React, { useState, useRef, useEffect } from "react";
 import { Modal, Button, Form, Alert } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "../../styles/MealCard.css"
-import { IoSwapHorizontalOutline } from "react-icons/io5"
+import { IoSwapHorizontalOutline, IoTrash } from "react-icons/io5"
+import axios from 'axios';
 
 
-const SwapMealModal = ({show, setShow, image, title, cals, carbs, protein, fat}) => {
+const SwapMealModal = ({id, mealDay, mealIndex, show, setShow, image, title, cals, carbs, protein, fat}) => {
 
-  // const handleClose = () => {
-  //   setShow(false);
-  // }
+  const handleDelete = () => {
+
+    const token = localStorage.getItem("jwt");
+    const config = {
+        headers: { Authorization: `Bearer ${token}` }
+    };
+
+    axios.delete(`http://localhost:5000/api/mealplan/removeMealFromMealPlan?mealDay=${mealDay}&mealIndex=${mealIndex}`, config)
+      .then(result => {
+        console.log(result);
+      })   
+      .catch(err => {
+          console.error(err);
+      });
+  }
 
 //   const handleSubmit = async (e) => {
 //     e.preventDefault(); //not needed unless using the form submit?
@@ -43,6 +56,7 @@ return (
             
             <div className="meal-card-thumb" style={{ backgroundImage: `url(${image})` }}>
               <Button className="modal-button" onClick={() => show ? setShow(false) : setShow(true)}><IoSwapHorizontalOutline /></Button>
+              <Button className="modal-button" onClick={() => handleDelete()}><IoTrash /></Button>
             </div>
         
              <div className="meal-card-text">
