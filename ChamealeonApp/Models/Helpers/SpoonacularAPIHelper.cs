@@ -77,8 +77,10 @@ namespace ChamealeonApp.Models.Helpers
         }
 
         //Mike
-        public static async Task<SearchRoot> GetMealSuggestions(string query)
+        //Get meal suggestions to populate the meal replacement options
+        public static async Task<SearchRoot> GetMealSuggestions(string query = "chicken")
         {
+
             var request = new RestRequest($"recipes/complexSearch").AddParameter("number", 6).AddParameter("apiKey", "eaa80ce8fa5c4a2fa1a3c6c875ef9bf5").AddParameter("query", query).AddParameter("addRecipeNutrition", true);
 
             var response = await client.GetAsync<SearchRoot>(request);

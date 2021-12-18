@@ -22,6 +22,7 @@ namespace ChamealeonApp.Controllers
     //Authors:
     //Amir:
     //Burhan: Implemented functionality for updating a user
+    //Mike: Implemented Deleting the user
     [ApiController]
     [Route("api/[controller]")]
     public class UserController : Controller
@@ -123,7 +124,7 @@ namespace ChamealeonApp.Controllers
         }
 
         //delete user
-        //mike
+        //Mike
         [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete()
@@ -135,7 +136,6 @@ namespace ChamealeonApp.Controllers
 
             await _userManager.DeleteAsync(user);
 
-            //await _context.SaveChangesAsync();
             return Ok();
         }
 

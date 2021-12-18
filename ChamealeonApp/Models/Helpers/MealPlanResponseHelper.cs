@@ -168,7 +168,6 @@ namespace ChamealeonApp.Models.Helpers
             }
             catch (System.Exception)
             {
-
                 throw new Exception("An error has occured creating a Meal Plan from the Spoonacular meal plan");
             }
 

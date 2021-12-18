@@ -16,7 +16,7 @@ const SwapMealModal = ({id, mealDay, mealIndex, show, setShow, image, title, cal
         headers: { Authorization: `Bearer ${token}` }
     };
 
-    axios.delete(`http://localhost:5000/api/mealplan/removeMealFromMealPlan?mealDay=${mealDay}&mealIndex=${mealIndex}`, config)
+    axios.delete(`http://localhost:5000/api/mealplan/removeMealFromMealPlan?day=${mealDay}&mealIndexInDay=${mealIndex}`, config)
       .then(result => {
         console.log(result);
       })   

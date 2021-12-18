@@ -32,18 +32,13 @@ const Home = () => {
         });
   }, [])
 
-
   return (
     <div>
       <SwapModal
           modalShow={modalShow}
           setShow={setModalShow}
           >
-          {/* <SwapMealModal /> */}
       </SwapModal>
-      {/* <div show={false}>HELLO</div> */}
-
-      {/* <div className="meal-container"> */}
       <div>
 
       {
@@ -80,28 +75,7 @@ const Home = () => {
             </div> 
           )}
       </div>
-
       }
-      
-        {/* <MealCard 
-        modalShow={modalShow}
-        setShow={setModalShow} />
-        <MealCard
-        modalShow={modalShow}
-        setShow={setModalShow}/>
-        <MealCard
-        modalShow={modalShow}
-        setShow={setModalShow} />
-        <MealCard 
-        modalShow={modalShow}
-        setShow={setModalShow}/>
-        <MealCard
-        modalShow={modalShow}
-        setShow={setModalShow}/>
-        <MealCard
-        modalShow={modalShow}
-        setShow={setModalShow} /> */}
-        
       </div>
     </div>
   );
