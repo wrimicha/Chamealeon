@@ -41,7 +41,7 @@ namespace ChamealeonApp.Models.Helpers
         //HELPER FUNC: GET full details of selected meal and save to db as a proper Meal object
         public static async Task<MealRoot> GetFullDetailsOfMeal(int id)
         {
-            var request = new RestRequest($"recipes/{id}/information").AddParameter("includeNutrition", "true").AddParameter("apiKey", "eaa80ce8fa5c4a2fa1a3c6c875ef9bf5");
+            var request = new RestRequest($"recipes/{id}/information").AddParameter("includeNutrition", "true").AddParameter("apiKey", "API KEY");
             var response = await client.GetAsync<MealRoot>(request);
             return response;
         }
@@ -64,7 +64,7 @@ namespace ChamealeonApp.Models.Helpers
                 excludeItems += $"{exclude[i]}";
             }
 
-            var request = new RestRequest($"mealplanner/generate").AddParameter("apiKey", "eaa80ce8fa5c4a2fa1a3c6c875ef9bf5").AddParameter("exclude", excludeItems).AddParameter("targetCalories", cals.ToString());
+            var request = new RestRequest($"mealplanner/generate").AddParameter("apiKey", "API KEY").AddParameter("exclude", excludeItems).AddParameter("targetCalories", cals.ToString());
 
             if (diet != null)
             {
@@ -81,7 +81,7 @@ namespace ChamealeonApp.Models.Helpers
         public static async Task<SearchRoot> GetMealSuggestions(string query = "chicken")
         {
 
-            var request = new RestRequest($"recipes/complexSearch").AddParameter("number", 6).AddParameter("apiKey", "eaa80ce8fa5c4a2fa1a3c6c875ef9bf5").AddParameter("query", query).AddParameter("addRecipeNutrition", true);
+            var request = new RestRequest($"recipes/complexSearch").AddParameter("number", 6).AddParameter("apiKey", "API KEY").AddParameter("query", query).AddParameter("addRecipeNutrition", true);
 
             var response = await client.GetAsync<SearchRoot>(request);
             return response;
@@ -90,7 +90,7 @@ namespace ChamealeonApp.Models.Helpers
         //Mike
         public static async Task<SearchRoot> GetMealSuggestions(string query, MealType mealType)
         {
-            var request = new RestRequest($"recipes/complexSearch").AddParameter("number", 6).AddParameter("apiKey", "eaa80ce8fa5c4a2fa1a3c6c875ef9bf5").AddParameter("query", query).AddParameter("addRecipeNutrition", true);
+            var request = new RestRequest($"recipes/complexSearch").AddParameter("number", 6).AddParameter("apiKey", "API KEY").AddParameter("query", query).AddParameter("addRecipeNutrition", true);
 
             if (mealType != 0)
             {
@@ -103,7 +103,7 @@ namespace ChamealeonApp.Models.Helpers
         //Mike
         public static async Task<SearchRoot> GetMealSuggestions(string query, string diet)
         {
-            var request = new RestRequest($"recipes/complexSearch").AddParameter("number", 6).AddParameter("apiKey", "eaa80ce8fa5c4a2fa1a3c6c875ef9bf5").AddParameter("query", query).AddParameter("addRecipeNutrition", true);
+            var request = new RestRequest($"recipes/complexSearch").AddParameter("number", 6).AddParameter("apiKey", "API KEY").AddParameter("query", query).AddParameter("addRecipeNutrition", true);
 
             if (diet != null)
             {
@@ -117,7 +117,7 @@ namespace ChamealeonApp.Models.Helpers
         //Mike
         public static async Task<SearchRoot> GetMealSuggestions(string query, string mealType, string diet)
         {
-            var request = new RestRequest($"recipes/complexSearch").AddParameter("number", 6).AddParameter("apiKey", "eaa80ce8fa5c4a2fa1a3c6c875ef9bf5").AddParameter("query", query).AddParameter("addRecipeNutrition", true);
+            var request = new RestRequest($"recipes/complexSearch").AddParameter("number", 6).AddParameter("apiKey", "API KEY").AddParameter("query", query).AddParameter("addRecipeNutrition", true);
 
             if (diet != null)
             {
