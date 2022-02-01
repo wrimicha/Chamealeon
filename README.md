@@ -1,5 +1,10 @@
 # Chamealeon
 
+<img width="1280" alt="Screen Shot 2022-01-11 at 7 32 04 PM" src="https://user-images.githubusercontent.com/60019847/151917254-f155b4d0-9014-4b8d-b3fa-6d399b9ffffc.png">
+<img width="1278" alt="Screen Shot 2022-01-11 at 7 47 15 PM" src="https://user-images.githubusercontent.com/60019847/151917273-f79f9a96-d197-4f1c-a81e-c0b6e79e7c48.png">
+<img width="1280" alt="Screen Shot 2022-01-11 at 8 07 00 PM" src="https://user-images.githubusercontent.com/60019847/151917302-ec5f4030-b070-412e-810c-ef853b1071ad.png">
+
+
 # Project Overview
 This project was created for our fifth semester Enterprise Software Systems final group project. The project is a health-based web application. The core functionality of the application is to generate meal plans for the week. There are 3 meals per day which are breakfast, lunch, and dinner respectively, for a total of 7 days or 21 meals. These meal plans are unique to each user as it considers the dietary needs/preferences as specified by the user for example if they are vegetarian. With this being said however, if the user does not like a particular meal that is generated, they will have the option to replace it with another meal. 
 
